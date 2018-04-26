@@ -12,3 +12,15 @@ Amélioration à faire pour notre projet (à améliorer au fur et à mesure de n
 	- …
 
 Ajouter se que vous considérez être utile ou cool pour le jeu 
+
+
+Tâches déjà réalisées :
+	- Gestion collision                           -> THOMAS
+	- Apparition objet                            -> CLEMENT
+	- Gestion déplacement                         -> TANGUY
+	- Interface Graphique (paintComponen)         -> LOUNESE
+	- Agrandissement de la taille du serpent      -> CHLOE
+	- Launcher                                    -> MARCO
+	- 
+
+http://skribbl.io/?bN6VZdq4HRWAyuQcfIlC
