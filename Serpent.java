@@ -35,7 +35,7 @@ class Serpent{
         listePoint.add(new Point(x + 10,y));
         listePoint.add(new Point(x,y));
 
-        score=0;
+        score = 0;
     }
 
     void tourne(int touche) {
@@ -54,6 +54,7 @@ class Serpent{
 
     // methode pour transmetttre les coordonnees des points du serpent
     ArrayList<Point> getList(){
+
         return listePoint;
     }
 
