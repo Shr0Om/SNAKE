@@ -40,14 +40,15 @@ class Grille extends JPanel {
     public ArrayList<String> messageMort;
 
     private Image imagePomme, imageTeteBas, imageTeteDroite, imageTeteGauche, imageTeteHaute,
-            imageQueueHaut, imageQueueBas, imageQueueDroite, imageQueueGauche, imageCorpsHaut, imageCorpsCote;
+            imageQueueHaut, imageQueueBas, imageQueueDroite, imageQueueGauche, imageCorpsHaut,
+            imageCorpsCote, imageCoudeHaut, imageCoudeBas, imageCoudeDroit, imageCoudeGauche, imageObstacle;
 
 
     public Grille(){
 
         messageMort = new ArrayList<String>();
 
-        setBackground(Color.black);
+        setBackground(Color.white);
         loadImages();
         niveau = 1;
         vitesse = 100;
@@ -129,6 +130,7 @@ class Grille extends JPanel {
         URL image9 = getClass().getResource("image/queueGauche.png");
         URL image10 = getClass().getResource("image/corpsHaut.png");
         URL image11 = getClass().getResource("image/corpsCote.png");
+        URL image12 = getClass().getResource("image/obstacle.png");
         try {
             imagePomme = ImageIO.read(image1);
             imagePomme = imagePomme.getScaledInstance(10, 10, imagePomme.SCALE_DEFAULT);
@@ -152,6 +154,9 @@ class Grille extends JPanel {
             imageCorpsHaut = imageCorpsHaut.getScaledInstance(10, 10, imageCorpsHaut.SCALE_DEFAULT);
             imageCorpsCote = ImageIO.read(image11);
             imageCorpsCote = imageCorpsCote.getScaledInstance(10, 10, imageCorpsCote.SCALE_DEFAULT);
+
+            imageObstacle = ImageIO.read(image12);
+            imageObstacle = imageObstacle.getScaledInstance(10, 10, imageObstacle.SCALE_DEFAULT);
         } catch (IOException e){
             e.printStackTrace();
         }
@@ -341,7 +346,7 @@ class Grille extends JPanel {
         super.paintComponent(g);
 
         if(etat == EtatJeu.GAMEOVER){
-            g.setColor(Color.white);
+            g.setColor(Color.black);
             g.setFont(new Font("Arial", 15, 50));
             g.drawString("GAME OVER", 200 , 100);
 
@@ -349,18 +354,18 @@ class Grille extends JPanel {
 //            g.setFont(new Font("Arial", 15, 40));
 //            g.drawString("Niveau " + String.valueOf(niveau), 300 , 150);
 
-            g.setColor(Color.white);
+            g.setColor(Color.black);
             g.setFont(new Font("Arial", 0, 20));
             g.drawString("Appuyer sur la touche Entrée pour retourner à la page d'accueil ", 80, 480);
             g.drawString("Appuyer sur Echap pour quitter", 225, 550);
         }
 
         if(etat == EtatJeu.PAUSE){
-            g.setColor(Color.white);
+            g.setColor(Color.black);
             g.setFont(new Font("Arial", 15, 50));
             g.drawString("PAUSE", 300 , 100);
 
-            g.setColor(Color.white);
+            g.setColor(Color.black);
             g.setFont(new Font("Arial", 15, 40));
             g.drawString("Niveau " + String.valueOf(niveau), 300 , 150);
 
@@ -369,7 +374,7 @@ class Grille extends JPanel {
             g.drawString("<- pour aller à gauche", 180, 300);
             g.drawString("-> pour aller à droite", 420, 300);
 
-            g.setColor(Color.white);
+            g.setColor(Color.black);
             g.setFont(new Font("Arial", 0, 20));
             g.drawString("Appuyer sur Espace pour démarrer", 225, 500);
             g.drawString("Appuyer sur Echap pour quitter", 225, 550);
@@ -411,9 +416,16 @@ class Grille extends JPanel {
                     }
                 }
                 if (p != tete && p != queue){
-                    if(snake.directionSerpent == 0 || snake.directionSerpent == 2){
+                    if (snake.directionSerpent == 2) {
                         g.drawImage(imageCorpsHaut, p.x, p.y, this);
-                    }else {
+                    }
+                    if (snake.directionSerpent == 0) {
+                        g.drawImage(imageCorpsHaut, p.x, p.y, this);
+                    }
+                    if (snake.directionSerpent == 1) {
+                        g.drawImage(imageCorpsCote, p.x, p.y, this);
+                    }
+                    if (snake.directionSerpent == 3) {
                         g.drawImage(imageCorpsCote, p.x, p.y, this);
                     }
                 }
@@ -428,8 +440,7 @@ class Grille extends JPanel {
             g.drawImage(imagePomme, pomme.p.x, pomme.p.y, this);
 
             for (Obstacle obstacle : tabObstacle ) {
-                g.setColor(Color.gray);
-                g.fillRect(obstacle.p.x,obstacle.p.y,10,10);
+                g.drawImage(imageObstacle,obstacle.p.x,obstacle.p.y,this);
             }
         }
     }
