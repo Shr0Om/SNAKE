@@ -71,7 +71,7 @@ class Grille extends JPanel {
 
         messageMort = new ArrayList<String>();
 
-        setBackground(Color.black);
+        setBackground(Color.white);
         loadImages();
         niveau = 1;
         vitesse = 100;
