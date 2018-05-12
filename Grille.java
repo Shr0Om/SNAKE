@@ -37,9 +37,7 @@ class Grille extends JPanel {
 
     public ArrayList<String> messageMort;
 
-    private Image imagePomme;
-    private Image imageTete;
-    private Image imageCorps;
+    private Image imagePomme, imageTete, imageQueue, imageCorps;
 
 
     public Grille(){
@@ -118,28 +116,21 @@ class Grille extends JPanel {
     private void loadImages() {
 
         URL image1 = getClass().getResource("image/apple.png");
-/*        URL image2 = getClass().getResource("image/snake.png");
-        URL image3 = getClass().getResource("image/dot.png");*/
+        URL image2 = getClass().getResource("image/tete.png");
+        URL image3 = getClass().getResource("image/queue.png");
+        URL image4 = getClass().getResource("image/corps.png");
         try {
             imagePomme = ImageIO.read(image1);
             imagePomme = imagePomme.getScaledInstance(10, 10, imagePomme.SCALE_DEFAULT);
-/*            imageTete = ImageIO.read(image2);
+            imageTete = ImageIO.read(image2);
             imageTete = imageTete.getScaledInstance(10, 10, imageTete.SCALE_DEFAULT);
-            imageCorps = ImageIO.read(image3);
-            imageCorps = imageCorps.getScaledInstance(10, 10, imageCorps.SCALE_DEFAULT);*/
+            imageQueue = ImageIO.read(image3);
+            imageQueue = imageQueue.getScaledInstance(10, 10, imageQueue.SCALE_DEFAULT);
+            imageCorps = ImageIO.read(image4);
+            imageCorps = imageCorps.getScaledInstance(10, 10, imageCorps.SCALE_DEFAULT);
         } catch (IOException e){
             e.printStackTrace();
         }
-
-//        ImageIcon iid = new ImageIcon("image/dot.png");
-//        imageCorps = iid.getImage();
-//        imageCorps = imageCorps.getScaledInstance(20, 20, imageCorps.SCALE_DEFAULT);
-//        ImageIcon iia = new ImageIcon("image/apple.png");
-//        imagePomme = iia.getImage();
-//        imagePomme = imagePomme.getScaledInstance(20, 20, imagePomme.SCALE_DEFAULT);
-//        ImageIcon iih = new ImageIcon("image/snake.png");
-//        imageTete = iih.getImage();
-//        imageTete = imageTete.getScaledInstance(20, 20, imageTete.SCALE_DEFAULT);
     }
 
     public void jouer(){
@@ -258,7 +249,7 @@ class Grille extends JPanel {
             }
             else {
                 if(p.x == tete.x && p.y == tete.y){
-                    messageMort.add("Le joueur s'est mangé la queu");
+                    messageMort.add("Le joueur s'est mangé la queue");
                     messageMort.add("score joueur : " + snake.score);
 
                     System.out.println("Le joueur s'est mangé la queue");
@@ -361,23 +352,22 @@ class Grille extends JPanel {
         }
 
         tete = snake.getList().get(0);
+        queue = snake.getList().get(snake.getList().size() - 1);
+        ;
         if (etat == EtatJeu.JOUER) {
             //parcours de la liste avec un itérateur
             //on dessine le serpent
-//            for (Point p:snake.getList() ) {
-////                if (p == tete) {
-////                    g.drawImage(imageTete, p.x, p.y, this);
-////                }else {
-////                    g.drawImage(imageCorps, p.x, p.y, this);
-//////                    g.setColor(Color.green);
-//////                    g.fillOval(p.x,p.y,10,10);
-////                }
-//             }
             for (Point p:snake.getList() ) {
-                g.setColor(Color.white);
-                g.fillRect(p.x,p.y,10,10);
-            }
-
+                if (p == tete) {
+                    g.drawImage(imageTete, p.x, p.y, this);
+                }
+                if (p == queue) {
+                    g.drawImage(imageQueue, p.x, p.y, this);
+                }
+                if (p != tete && p != queue){
+                    g.drawImage(imageCorps, p.x, p.y, this);
+                }
+          }
             if (modeJeu == 2){
                 for (Point p:snake2.getList() ) {
                     g.setColor(Color.red);
@@ -385,16 +375,12 @@ class Grille extends JPanel {
                 }
             }
             //on dessine la pomme dans la fenetre
-//            g.setColor(Color.white);
-//            g.fillOval(pomme.p.x, pomme.p.y,10,10);
             g.drawImage(imagePomme, pomme.p.x, pomme.p.y, this);
 
             for (Obstacle obstacle : tabObstacle ) {
                 g.setColor(Color.gray);
                 g.fillRect(obstacle.p.x,obstacle.p.y,10,10);
             }
-
-
         }
     }
 
