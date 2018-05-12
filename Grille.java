@@ -336,7 +336,7 @@ class Grille extends JPanel {
 
             g.setColor(Color.white);
             g.setFont(new Font("Arial", 0, 20));
-            g.drawString("Appuyer sur la touche Entré pour retourner à la page d'accueil ", 225, 500);
+            g.drawString("Appuyer sur la touche Entrée pour retourner à la page d'accueil ", 80, 480);
             g.drawString("Appuyer sur Echap pour quitter", 225, 550);
         }
 
