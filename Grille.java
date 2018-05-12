@@ -118,15 +118,15 @@ class Grille extends JPanel {
     private void loadImages() {
 
         URL image1 = getClass().getResource("image/apple.png");
-        URL image2 = getClass().getResource("image/snake.png");
-        URL image3 = getClass().getResource("image/dot.png");
+/*        URL image2 = getClass().getResource("image/snake.png");
+        URL image3 = getClass().getResource("image/dot.png");*/
         try {
             imagePomme = ImageIO.read(image1);
             imagePomme = imagePomme.getScaledInstance(10, 10, imagePomme.SCALE_DEFAULT);
-            imageTete = ImageIO.read(image2);
+/*            imageTete = ImageIO.read(image2);
             imageTete = imageTete.getScaledInstance(10, 10, imageTete.SCALE_DEFAULT);
             imageCorps = ImageIO.read(image3);
-            imageCorps = imageCorps.getScaledInstance(10, 10, imageCorps.SCALE_DEFAULT);
+            imageCorps = imageCorps.getScaledInstance(10, 10, imageCorps.SCALE_DEFAULT);*/
         } catch (IOException e){
             e.printStackTrace();
         }
