@@ -24,7 +24,7 @@ public class Snake extends JFrame implements KeyListener {
 //        s = new JTextArea("Score ==>" + score);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                System.exit(0);
+                dispose();
             }
         });
         addKeyListener(this);
@@ -75,12 +75,11 @@ public class Snake extends JFrame implements KeyListener {
         }
         //si on presse sur echape, on quitte
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            System.exit(0);
+            dispose();
         }
         //si on presse sur entré, on retourne à la page d'accueil
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             Launcher f = new Launcher();
-//            System.exit(0);
         }
     }
 
@@ -107,7 +106,7 @@ public class Snake extends JFrame implements KeyListener {
         exit.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                System.exit(0);
+                dispose();
             }
         });
 
