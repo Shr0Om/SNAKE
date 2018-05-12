@@ -8,7 +8,7 @@ public class Launcher extends JFrame {
     private JLabel pseudoLabel, difficulteLabel, titre;
     private JFrame frame3;
     private JPanel panoTitre, panoInfo, panoBouton, panoHelp, panoGlobal;
-    private JButton start, help;
+    private JButton start, help, multi;
     private JTextField pseudoText;
     private JComboBox<Integer> difficulteBox;
     private JOptionPane erreur;
@@ -16,6 +16,7 @@ public class Launcher extends JFrame {
     private JPanel centreTitre;
 
     protected Launcher() {
+
         creerWidget();
         afficheWidget();
         action();
@@ -25,16 +26,25 @@ public class Launcher extends JFrame {
     }
 
     private void action() {
+
         start.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
                 if (pseudoText.getText().isEmpty()){
                     erreur.showMessageDialog(start, "Veuillez entrer un pseudo", "Erreur",JOptionPane.ERROR_MESSAGE);
                     erreurDialog = erreur.createDialog(start, "Erreur");
                 }else {
-                    Snake frame = new Snake();
+                    Snake frame = new Snake(1);
                     frame.pack();
                     frame.setVisible(true);
                 }
+            }
+        });
+
+        multi.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                Snake frame = new Snake(2);
+                frame.pack();
+                frame.setVisible(true);
             }
         });
 
@@ -62,6 +72,7 @@ public class Launcher extends JFrame {
 
         start = new JButton("Play");
         help = new JButton("Help");
+        multi = new JButton("Mode multijoueur");
 
         pseudoText = new JTextField();
         pseudoText.setColumns(10);
@@ -79,6 +90,7 @@ public class Launcher extends JFrame {
     }
 
     private void afficheWidget(){
+
         panoTitre.add(centreTitre, BorderLayout.NORTH);
         panoInfo.add(pseudoLabel);
         panoInfo.add(pseudoText);
@@ -87,6 +99,7 @@ public class Launcher extends JFrame {
         panoTitre.add(panoInfo, BorderLayout.CENTER);
         panoBouton.add(start);
         panoBouton.add(help);
+        panoBouton.add(multi);
         panoGlobal.setLayout(new BoxLayout(panoGlobal, BoxLayout.Y_AXIS));
         panoGlobal.add(panoTitre);
         panoGlobal.add(panoBouton);
