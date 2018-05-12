@@ -7,7 +7,7 @@ public class Launcher extends JFrame {
 
     private JLabel pseudoLabel, difficulteLabel, titre, pseudo2Label, titreHelp;
     private JFrame frame3;
-    private JPanel panoTitre, panoInfo, panoBouton, panoGlobal, panoHelp;
+    private JPanel panoTitre, panoInfo, panoInfo2, panoInfo3, panoBouton, panoGlobal, panoCentral;
     private JButton start, help, multijoueur, unJoueur;
     private JTextField pseudoText, pseudo2Text;
     private JComboBox<Integer> difficulteBox;
@@ -122,7 +122,10 @@ public class Launcher extends JFrame {
 
         panoTitre = new JPanel(new BorderLayout());
         panoInfo = new JPanel();
+        panoInfo2 = new JPanel();
+        panoInfo3 = new JPanel();
         panoBouton = new JPanel();
+        panoCentral = new JPanel();
         panoGlobal = new JPanel();
 
         erreur = new JOptionPane();
@@ -138,7 +141,7 @@ public class Launcher extends JFrame {
 
         panoTitre = new JPanel(new BorderLayout());
         panoBouton = new JPanel();
-        panoGlobal = new JPanel();
+        panoGlobal = new JPanel(new BorderLayout());
     }
 
     private void afficheWidgetHelp(){
@@ -154,14 +157,17 @@ public class Launcher extends JFrame {
         panoTitre.add(centreTitre, BorderLayout.NORTH);
         panoInfo.add(pseudoLabel);
         panoInfo.add(pseudoText);
-        panoInfo.add(difficulteLabel);
-        panoInfo.add(difficulteBox);
-        panoTitre.add(panoInfo, BorderLayout.CENTER);
+        panoInfo3.add(difficulteLabel);
+        panoInfo3.add(difficulteBox);
+        panoCentral.setLayout(new BoxLayout(panoCentral, BoxLayout.Y_AXIS));
+        panoCentral.add(panoInfo);
+        panoCentral.add(panoInfo3);
         panoBouton.add(multijoueur);
         panoBouton.add(start);
         panoBouton.add(help);
         panoGlobal.setLayout(new BoxLayout(panoGlobal, BoxLayout.Y_AXIS));
         panoGlobal.add(panoTitre);
+        panoGlobal.add(panoCentral);
         panoGlobal.add(panoBouton);
         setContentPane(panoGlobal);
     }
@@ -169,18 +175,21 @@ public class Launcher extends JFrame {
     private void afficheWidgetMulti(){
         panoTitre.add(centreTitre, BorderLayout.NORTH);
         panoInfo.add(pseudoLabel);
-        panoInfo.add(pseudo2Label);
+        panoInfo2.add(pseudo2Label);
         panoInfo.add(pseudoText);
-        panoInfo.add(pseudo2Label);
-        panoInfo.add(pseudo2Text);
-        panoInfo.add(difficulteLabel);
-        panoInfo.add(difficulteBox);
-        panoTitre.add(panoInfo, BorderLayout.CENTER);
+        panoInfo2.add(pseudo2Text);
+        panoInfo3.add(difficulteLabel);
+        panoInfo3.add(difficulteBox);
         panoBouton.add(unJoueur);
         panoBouton.add(start);
         panoBouton.add(help);
+        panoCentral.setLayout(new BoxLayout(panoCentral, BoxLayout.Y_AXIS));
+        panoCentral.add(panoInfo);
+        panoCentral.add(panoInfo2);
+        panoCentral.add(panoInfo3);
         panoGlobal.setLayout(new BoxLayout(panoGlobal, BoxLayout.Y_AXIS));
         panoGlobal.add(panoTitre);
+        panoGlobal.add(panoCentral, BorderLayout.NORTH);
         panoGlobal.add(panoBouton);
         setContentPane(panoGlobal);
     }
