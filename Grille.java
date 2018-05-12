@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -37,7 +39,8 @@ class Grille extends JPanel {
 
     public ArrayList<String> messageMort;
 
-    private Image imagePomme, imageTete, imageQueue, imageCorps;
+    private Image imagePomme, imageTeteBas, imageTeteDroite, imageTeteGauche, imageTeteHaute,
+            imageQueueHaut, imageQueueBas, imageQueueDroite, imageQueueGauche, imageCorpsHaut, imageCorpsCote;
 
 
     public Grille(){
@@ -116,18 +119,39 @@ class Grille extends JPanel {
     private void loadImages() {
 
         URL image1 = getClass().getResource("image/apple.png");
-        URL image2 = getClass().getResource("image/tete.png");
-        URL image3 = getClass().getResource("image/queue.png");
-        URL image4 = getClass().getResource("image/corps.png");
+        URL image2 = getClass().getResource("image/teteHaut.png");
+        URL image3 = getClass().getResource("image/teteBas.png");
+        URL image4 = getClass().getResource("image/teteDroite.png");
+        URL image5 = getClass().getResource("image/teteGauche.png");
+        URL image6 = getClass().getResource("image/queueBas.png");
+        URL image7 = getClass().getResource("image/queueHaut.png");
+        URL image8 = getClass().getResource("image/queueDroite.png");
+        URL image9 = getClass().getResource("image/queueGauche.png");
+        URL image10 = getClass().getResource("image/corpsHaut.png");
+        URL image11 = getClass().getResource("image/corpsCote.png");
         try {
             imagePomme = ImageIO.read(image1);
             imagePomme = imagePomme.getScaledInstance(10, 10, imagePomme.SCALE_DEFAULT);
-            imageTete = ImageIO.read(image2);
-            imageTete = imageTete.getScaledInstance(10, 10, imageTete.SCALE_DEFAULT);
-            imageQueue = ImageIO.read(image3);
-            imageQueue = imageQueue.getScaledInstance(10, 10, imageQueue.SCALE_DEFAULT);
-            imageCorps = ImageIO.read(image4);
-            imageCorps = imageCorps.getScaledInstance(10, 10, imageCorps.SCALE_DEFAULT);
+            imageTeteHaute = ImageIO.read(image2);
+            imageTeteHaute = imageTeteHaute.getScaledInstance(10, 10, imageTeteHaute.SCALE_DEFAULT);
+            imageTeteBas = ImageIO.read(image3);
+            imageTeteBas = imageTeteBas.getScaledInstance(10, 10, imageTeteBas.SCALE_DEFAULT);
+            imageTeteDroite = ImageIO.read(image4);
+            imageTeteDroite = imageTeteDroite.getScaledInstance(10, 10, imageTeteDroite.SCALE_DEFAULT);
+            imageTeteGauche = ImageIO.read(image5);
+            imageTeteGauche = imageTeteGauche.getScaledInstance(10, 10, imageTeteGauche.SCALE_DEFAULT);
+            imageQueueBas = ImageIO.read(image6);
+            imageQueueBas = imageQueueBas.getScaledInstance(10, 10, imageQueueBas.SCALE_DEFAULT);
+            imageQueueHaut = ImageIO.read(image7);
+            imageQueueHaut = imageQueueHaut.getScaledInstance(10, 10, imageQueueHaut.SCALE_DEFAULT);
+            imageQueueDroite = ImageIO.read(image8);
+            imageQueueDroite = imageQueueDroite.getScaledInstance(10, 10, imageQueueDroite.SCALE_DEFAULT);
+            imageQueueGauche = ImageIO.read(image9);
+            imageQueueGauche = imageQueueGauche.getScaledInstance(10, 10, imageQueueGauche.SCALE_DEFAULT);
+            imageCorpsHaut = ImageIO.read(image10);
+            imageCorpsHaut = imageCorpsHaut.getScaledInstance(10, 10, imageCorpsHaut.SCALE_DEFAULT);
+            imageCorpsCote = ImageIO.read(image11);
+            imageCorpsCote = imageCorpsCote.getScaledInstance(10, 10, imageCorpsCote.SCALE_DEFAULT);
         } catch (IOException e){
             e.printStackTrace();
         }
@@ -359,13 +383,39 @@ class Grille extends JPanel {
             //on dessine le serpent
             for (Point p:snake.getList() ) {
                 if (p == tete) {
-                    g.drawImage(imageTete, p.x, p.y, this);
+                    if (snake.directionSerpent == 2) {
+                        g.drawImage(imageTeteHaute, p.x, p.y, this);
+                    }
+                    if (snake.directionSerpent == 0) {
+                        g.drawImage(imageTeteBas, p.x, p.y, this);
+                    }
+                    if (snake.directionSerpent == 1) {
+                        g.drawImage(imageTeteGauche, p.x, p.y, this);
+                    }
+                    if (snake.directionSerpent == 3) {
+                        g.drawImage(imageTeteDroite, p.x, p.y, this);
+                    }
                 }
                 if (p == queue) {
-                    g.drawImage(imageQueue, p.x, p.y, this);
+                    if (snake.directionSerpent == 2) {
+                        g.drawImage(imageQueueBas, p.x, p.y, this);
+                    }
+                    if (snake.directionSerpent == 0) {
+                        g.drawImage(imageQueueHaut, p.x, p.y, this);
+                    }
+                    if (snake.directionSerpent == 1) {
+                        g.drawImage(imageQueueDroite, p.x, p.y, this);
+                    }
+                    if (snake.directionSerpent == 3) {
+                        g.drawImage(imageQueueGauche, p.x, p.y, this);
+                    }
                 }
                 if (p != tete && p != queue){
-                    g.drawImage(imageCorps, p.x, p.y, this);
+                    if(snake.directionSerpent == 0 || snake.directionSerpent == 2){
+                        g.drawImage(imageCorpsHaut, p.x, p.y, this);
+                    }else {
+                        g.drawImage(imageCorpsCote, p.x, p.y, this);
+                    }
                 }
           }
             if (modeJeu == 2){
