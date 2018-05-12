@@ -142,9 +142,4 @@ public class Snake extends JFrame implements KeyListener {
 
         setJMenuBar(mymbar);
     }
-
 }
-
-
-
-
