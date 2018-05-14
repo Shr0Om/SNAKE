@@ -9,7 +9,7 @@ class Serpent{
     private static final int longueur = 50;
     private static final int largeur = 70;
     public int score;
-    private int directionSerpent;
+    public int directionSerpent;
     private int tourne;
 
     public Serpent(){
