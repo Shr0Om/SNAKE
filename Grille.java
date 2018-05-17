@@ -1,6 +1,4 @@
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -22,6 +20,7 @@ class Grille extends JPanel {
     public Point queue;
     public Fruit pomme;
     public ArrayList<Obstacle> tabObstacle;
+    public Bonus bonus;
 
     // définie le niveau du joueur et défini en fonction de cela la vitesse du serpent
     public int niveau;
@@ -53,6 +52,7 @@ class Grille extends JPanel {
         niveau = 1;
         vitesse = 100;
         nbObstacle = tabNbObstacle[niveau];
+
         pause = true;
         timer = new Timer();
 
@@ -61,6 +61,7 @@ class Grille extends JPanel {
         queue = new Point();        // coordonnees de la tete et de la queue du serpent
 
         pomme = new Fruit();
+        bonus = new Bonus();
         gestionObstacle(nbObstacle);
 
     }
@@ -88,6 +89,7 @@ class Grille extends JPanel {
         queue = new Point();
 
         pomme = new Fruit();
+        bonus = new Bonus();
         gestionObstacle(nbObstacle);
 
     }
@@ -114,6 +116,7 @@ class Grille extends JPanel {
         queue = new Point();
 
         pomme = new Fruit();
+        bonus = new Bonus();
         gestionObstacle(nbObstacle);
     }
 
@@ -131,6 +134,7 @@ class Grille extends JPanel {
         URL image10 = getClass().getResource("image/corpsHaut.png");
         URL image11 = getClass().getResource("image/corpsCote.png");
         URL image12 = getClass().getResource("image/obstacle.png");
+
         try {
             imagePomme = ImageIO.read(image1);
             imagePomme = imagePomme.getScaledInstance(10, 10, imagePomme.SCALE_DEFAULT);
@@ -154,7 +158,6 @@ class Grille extends JPanel {
             imageCorpsHaut = imageCorpsHaut.getScaledInstance(10, 10, imageCorpsHaut.SCALE_DEFAULT);
             imageCorpsCote = ImageIO.read(image11);
             imageCorpsCote = imageCorpsCote.getScaledInstance(10, 10, imageCorpsCote.SCALE_DEFAULT);
-
             imageObstacle = ImageIO.read(image12);
             imageObstacle = imageObstacle.getScaledInstance(10, 10, imageObstacle.SCALE_DEFAULT);
         } catch (IOException e){
@@ -177,15 +180,16 @@ class Grille extends JPanel {
                     snake2.avancerSerpent();
                     gereColision(snake);
                     gereColision(snake2);
+                    collisionSnake(snake, snake2);
                     gameOver();
                     repaint();
                 }
-
             }
         };
 
         etat = EtatJeu.JOUER;
         timer.schedule(timerTask,0,vitesse);
+        System.out.println(vitesse);
     }
 
     public void pause(){
@@ -282,9 +286,8 @@ class Grille extends JPanel {
                     messageMort.add("score joueur : " + snake.score);
 
                     System.out.println("Le joueur s'est mangé la queue");
-                    System.out.println("score joueur : "+ snake.score);
+                    System.out.println("score joueur : "+ s.score);
 
-//                    System.exit(0);
                 }
             }
         }
@@ -292,12 +295,7 @@ class Grille extends JPanel {
         // pour vérifier si il ne va pas a l'exterieur du plateau
         if (tete.x < 10 || tete.y > 560 || tete.x > 790 || tete.y < 10){
             messageMort.add("Le joueur s'est pris un mur");
-            messageMort.add("score joueur : " + snake.score);
-
-            System.out.println("Le joueur s'est pris un mur");
-            System.out.println("score joueur : " + snake.score);
-
-//            System.exit(0);
+            messageMort.add("score joueur : " + s.score);
         }
 
         // pour vérifier si il n'est pas sur une pomme
@@ -314,21 +312,79 @@ class Grille extends JPanel {
             s.score ++;                                     // ajoute 1 au score
             System.out.println(s.score);
             niveauTermine(s);
+            vitesse -= 10;
+            jouer();
         }
 
         // pour vérifier si il ne touche pas un obstacle
         for (Obstacle obstacle : tabObstacle ) {
             if(obstacle.p.x == tete.x && obstacle.p.y == tete.y){
                 messageMort.add("Le joueur s'est pris un obstacle");
-                messageMort.add("score joueur : " + snake.score);
+                messageMort.add("score joueur : " + s.score);
+            }
+        }
 
-                System.out.println("Le joueur s'est pris obstacle");
-                System.out.println("score joueur : "+ s.score);
+        // pour vérifier si il n'est pas sur un bonus
+        if(tete.x == bonus.p.x && tete.y == bonus.p.y){
+            while(true){
+                for(Point serpent : s.getList()){                   // condition pour vérifier si la pomme n'apparait
+                    if(bonus.p.x == serpent.x && bonus.p.y == serpent.y){   // pas sur le snake, sinon on recommence
+                        bonus = new Bonus();
+                    }
+                }
+                break;
+            }
+            effetBonus(bonus.typeBonus);
+        }
+    }
 
-//                System.exit(0);
+    public void collisionSnake(Serpent s1, Serpent s2){
+
+        Point tete1 = new Point();
+        Point tete2 = new Point();
+
+        tete1 = s1.getList().get(0);
+        tete2 = s2.getList().get(0);
+
+        // vérifie si le serpent ne touche pas un autre serpent avec sa tête pour le Serpent 1
+        for (Point p : s2.getList() ) {
+            if(p.x == tete1.x && p.y == tete1.y){
+                messageMort.add("Le joueur 1 s'est pris l'ennemi");
+                messageMort.add("score joueur 1 : " + s1.score);
+                messageMort.add("score joueur 2 : " + s2.score);
+            }
+        }
+
+        // vérifie si le serpent ne touche pas un autre serpent avec sa tête pour le Serpent 2
+        for (Point p : s1.getList() ) {
+            if(p.x == tete2.x && p.y == tete2.y){
+                messageMort.add("Le joueur s'est pris l'ennemi");
+                messageMort.add("score joueur 1 : " + s1.score);
+                messageMort.add("score joueur 2 : " + s2.score);
             }
         }
     }
+
+    public void effetBonus(int bonus){
+        switch (bonus){
+            case 1:
+                vitesse += 10;
+                System.out.println(vitesse);
+                jouer();
+                break;
+            case 2:
+                vitesse -= 10;
+                System.out.println(vitesse);
+                jouer();
+                break;
+            case 3:
+                vitesse += 30;
+                System.out.println(vitesse);
+                jouer();
+                break;
+        }
+    }
+
 
     public void niveauTermine(Serpent s){
 
@@ -350,9 +406,12 @@ class Grille extends JPanel {
             g.setFont(new Font("Arial", 15, 50));
             g.drawString("GAME OVER", 200 , 100);
 
-//            g.setColor(Color.white);
-//            g.setFont(new Font("Arial", 15, 40));
-//            g.drawString("Niveau " + String.valueOf(niveau), 300 , 150);
+            g.setColor(Color.black);
+            g.setFont(new Font("Arial", 15, 20));
+            for (int i=0; i<messageMort.size(); i++){
+                g.drawString(messageMort.get(i), 300 , 150);
+            }
+
 
             g.setColor(Color.black);
             g.setFont(new Font("Arial", 0, 20));
@@ -382,11 +441,12 @@ class Grille extends JPanel {
 
         tete = snake.getList().get(0);
         queue = snake.getList().get(snake.getList().size() - 1);
-        ;
+
         if (etat == EtatJeu.JOUER) {
             //parcours de la liste avec un itérateur
             //on dessine le serpent
             for (Point p:snake.getList() ) {
+
                 if (p == tete) {
                     if (snake.directionSerpent == 2) {
                         g.drawImage(imageTeteHaute, p.x, p.y, this);
@@ -401,6 +461,7 @@ class Grille extends JPanel {
                         g.drawImage(imageTeteDroite, p.x, p.y, this);
                     }
                 }
+
                 if (p == queue) {
                     if (snake.directionSerpent == 2) {
                         g.drawImage(imageQueueBas, p.x, p.y, this);
@@ -415,7 +476,8 @@ class Grille extends JPanel {
                         g.drawImage(imageQueueGauche, p.x, p.y, this);
                     }
                 }
-                if (p != tete && p != queue){
+
+                if (p != tete && p!= queue){
                     if (snake.directionSerpent == 2) {
                         g.drawImage(imageCorpsHaut, p.x, p.y, this);
                     }
@@ -429,7 +491,7 @@ class Grille extends JPanel {
                         g.drawImage(imageCorpsCote, p.x, p.y, this);
                     }
                 }
-          }
+            }
             if (modeJeu == 2){
                 for (Point p:snake2.getList() ) {
                     g.setColor(Color.red);
@@ -438,6 +500,8 @@ class Grille extends JPanel {
             }
             //on dessine la pomme dans la fenetre
             g.drawImage(imagePomme, pomme.p.x, pomme.p.y, this);
+
+            g.fillRect(bonus.p.x, bonus.p.y, 10,10);
 
             for (Obstacle obstacle : tabObstacle ) {
                 g.drawImage(imageObstacle,obstacle.p.x,obstacle.p.y,this);
