@@ -13,6 +13,7 @@ public class Snake extends JFrame implements KeyListener {
     JTextArea s;
     JMenuBar mymbar;
     JMenu game, help, level;
+    JButton jenesaispas;
 
 
 
@@ -20,8 +21,6 @@ public class Snake extends JFrame implements KeyListener {
         super("SNAKE");
         // créer menu bar avec des fonctionnalités
         menuBar();
-//        // affiche le score
-//        s = new JTextArea("Score ==>" + score);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 dispose();
@@ -36,14 +35,30 @@ public class Snake extends JFrame implements KeyListener {
         }
 
         JPanel grille = new JPanel();
+
         JLabel label = new JLabel("Le Jeu: SNAKE");
         JPanel centreTitre = new JPanel();
+
         centreTitre.add(label);
         grille.setLayout(new BorderLayout());
         grille.setPreferredSize(new Dimension(800, 600));
         grille.add(dessin, BorderLayout.CENTER);
         grille.add(centreTitre, BorderLayout.NORTH);
-        setContentPane(grille);
+
+        JPanel fenetreJeu = new JPanel();
+        fenetreJeu.setLayout(new BorderLayout());
+
+        p1 = new JPanel();
+        jenesaispas = new JButton("Super bouton trop cool !");
+
+        JLabel afficheScore = new JLabel("Le score du joueur 1 :" + dessin.snake.score);
+        p1.add(afficheScore);
+        p1.setSize(300,600);
+
+        fenetreJeu.add(grille, BorderLayout.WEST);
+        fenetreJeu.add(p1, BorderLayout.EAST);
+
+        setContentPane(fenetreJeu);
     }
 
 
@@ -75,11 +90,11 @@ public class Snake extends JFrame implements KeyListener {
         }
         //si on presse sur echape, on quitte
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            dispose();
+            System.exit(0);
         }
         //si on presse sur entré, on retourne à la page d'accueil
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-            Launcher f = new Launcher();
+            dispose();                        // fonction java suppriment une jframe pour en recréer une nouvelle
         }
     }
 
