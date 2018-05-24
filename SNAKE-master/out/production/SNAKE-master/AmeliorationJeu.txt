@@ -1,0 +1,26 @@
+Amélioration à faire pour notre projet (à améliorer au fur et à mesure de notre avancement) :
+
+	- Mode multijoueur
+	- Ajouter l’option de multi joueur dans le launcher 
+	- Créer un fichier texte qui enregistre les meilleurs scores 
+	- Afficher les meilleurs scores à droite de notre grille de jeu
+	- Ajouter des bonus et des malus dans la classe Bonus (comme par exemple : accélération, diminution du serpent, ralentissement, croissance instantané…)
+	- Ajouter la possibilité d’avoir plusieurs fruits différents qui font chacun gagner un certain nombre de point au score
+	- Ajouter dans la classe Obstacle l’apparition aléatoire d’un mur à tel ou tel endroit rendant plus difficile le déplacement du joueur
+	- Améliorer le design du jeu (ajouter des images au lieu de créer des formes géométrique pour le serpent ou les fruits)
+	- …
+
+Ajouter se que vous considérez être utile ou cool pour le jeu 
+
+
+Tâches déjà réalisées :
+	- Gestion collision                           -> THOMAS
+	- Apparition objet                            -> CLEMENT
+	- Gestion déplacement                         -> TANGUY
+	- Interface Graphique (paintComponen)         -> LOUNESE
+	- Agrandissement de la taille du serpent      -> CHLOE
+	- Launcher                                    -> MARCO
+	- La pause du jeu                             -> CHLOE 
+	- La pseudo gestion des niveaux 	      ->
+	(avec augmentation vitesse au fil des niveaux)
+
