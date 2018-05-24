@@ -5,12 +5,11 @@ import java.awt.event.ActionListener;
 
 public class Launcher extends JFrame {
 
-    private JLabel pseudoLabel, difficulteLabel, titre, pseudo2Label, titreHelp;
+    private JLabel pseudoLabel, titre, pseudo2Label, titreHelp;
     private JFrame frame3;
     private JPanel panoTitre, panoInfo, panoInfo2, panoInfo3, panoBouton, panoGlobal, panoCentral;
     private JButton start, help, multijoueur, unJoueur;
     private JTextField pseudoText, pseudo2Text;
-    private JComboBox<Integer> difficulteBox;
     private JOptionPane erreur;
     private JDialog erreurDialog;
     private JPanel centreTitre, centreTitreHelp;
@@ -62,12 +61,12 @@ public class Launcher extends JFrame {
                     erreurDialog = erreur.createDialog(start, "Erreur");
                 }
                 if(unPlayer && verification){
-                    Snake frame = new Snake(1);
+                    Snake frame = new Snake(1, pseudoText.getText());
                     frame.pack();
                     frame.setVisible(true);
                 }
                 if (multi && verification){
-                    Snake frame = new Snake(2);
+                    Snake frame = new Snake(2, pseudoText.getText());
                     frame.pack();
                     frame.setVisible(true);
                 }
@@ -105,7 +104,6 @@ public class Launcher extends JFrame {
         titre.setFont(new Font(titre.getFont().getName(), titre.getFont().getStyle(), 30));
         pseudoLabel = new JLabel("Joueur 1");
         pseudo2Label = new JLabel("Joueur 2");
-        difficulteLabel = new JLabel("Difficulté");
 
         start = new JButton("Jouer");
         help = new JButton("Aide");
@@ -116,9 +114,6 @@ public class Launcher extends JFrame {
         pseudoText.setColumns(10);
         pseudo2Text = new JTextField();
         pseudo2Text.setColumns(10);
-
-        Integer[] tabInt = new Integer[]{1, 2, 3, 4, 5};
-        difficulteBox = new JComboBox<>(tabInt);
 
         panoTitre = new JPanel(new BorderLayout());
         panoInfo = new JPanel();
@@ -145,6 +140,7 @@ public class Launcher extends JFrame {
     }
 
     private void afficheWidgetHelp(){
+
         panoTitre.add(centreTitre, BorderLayout.NORTH);
         panoBouton.add(unJoueur);
         panoGlobal.setLayout(new BoxLayout(panoGlobal, BoxLayout.Y_AXIS));
@@ -154,43 +150,47 @@ public class Launcher extends JFrame {
     }
 
     private void afficheWidget(){
+
         panoTitre.add(centreTitre, BorderLayout.NORTH);
         panoInfo.add(pseudoLabel);
         panoInfo.add(pseudoText);
-        panoInfo3.add(difficulteLabel);
-        panoInfo3.add(difficulteBox);
         panoCentral.setLayout(new BoxLayout(panoCentral, BoxLayout.Y_AXIS));
         panoCentral.add(panoInfo);
         panoCentral.add(panoInfo3);
+        panoTitre.add(panoCentral, BorderLayout.CENTER);
+
         panoBouton.add(multijoueur);
         panoBouton.add(start);
         panoBouton.add(help);
         panoGlobal.setLayout(new BoxLayout(panoGlobal, BoxLayout.Y_AXIS));
         panoGlobal.add(panoTitre);
-        panoGlobal.add(panoCentral);
         panoGlobal.add(panoBouton);
+
         setContentPane(panoGlobal);
     }
 
     private void afficheWidgetMulti(){
+
         panoTitre.add(centreTitre, BorderLayout.NORTH);
         panoInfo.add(pseudoLabel);
         panoInfo2.add(pseudo2Label);
         panoInfo.add(pseudoText);
         panoInfo2.add(pseudo2Text);
-        panoInfo3.add(difficulteLabel);
-        panoInfo3.add(difficulteBox);
-        panoBouton.add(unJoueur);
-        panoBouton.add(start);
-        panoBouton.add(help);
+
         panoCentral.setLayout(new BoxLayout(panoCentral, BoxLayout.Y_AXIS));
         panoCentral.add(panoInfo);
         panoCentral.add(panoInfo2);
         panoCentral.add(panoInfo3);
+        panoTitre.add(panoCentral, BorderLayout.CENTER);
+
+        panoBouton.add(unJoueur);
+        panoBouton.add(start);
+        panoBouton.add(help);
+
         panoGlobal.setLayout(new BoxLayout(panoGlobal, BoxLayout.Y_AXIS));
         panoGlobal.add(panoTitre);
-        panoGlobal.add(panoCentral, BorderLayout.NORTH);
         panoGlobal.add(panoBouton);
+
         setContentPane(panoGlobal);
     }
 
