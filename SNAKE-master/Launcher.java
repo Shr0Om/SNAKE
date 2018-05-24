@@ -5,12 +5,11 @@ import java.awt.event.ActionListener;
 
 public class Launcher extends JFrame {
 
-    private JLabel pseudoLabel, difficulteLabel, titre, pseudo2Label, titreHelp;
+    private JLabel pseudoLabel, titre, pseudo2Label, titreHelp;
     private JFrame frame3;
     private JPanel panoTitre, panoInfo, panoInfo2, panoInfo3, panoBouton, panoGlobal, panoCentral;
     private JButton start, help, multijoueur, unJoueur;
     private JTextField pseudoText, pseudo2Text;
-    private JComboBox<Integer> difficulteBox;
     private JOptionPane erreur;
     private JDialog erreurDialog;
     private JPanel centreTitre, centreTitreHelp;
@@ -105,7 +104,6 @@ public class Launcher extends JFrame {
         titre.setFont(new Font(titre.getFont().getName(), titre.getFont().getStyle(), 30));
         pseudoLabel = new JLabel("Joueur 1");
         pseudo2Label = new JLabel("Joueur 2");
-        difficulteLabel = new JLabel("Difficulté");
 
         start = new JButton("Jouer");
         help = new JButton("Aide");
@@ -116,9 +114,6 @@ public class Launcher extends JFrame {
         pseudoText.setColumns(10);
         pseudo2Text = new JTextField();
         pseudo2Text.setColumns(10);
-
-        Integer[] tabInt = new Integer[]{1, 2, 3, 4, 5};
-        difficulteBox = new JComboBox<>(tabInt);
 
         panoTitre = new JPanel(new BorderLayout());
         panoInfo = new JPanel();
@@ -157,8 +152,6 @@ public class Launcher extends JFrame {
         panoTitre.add(centreTitre, BorderLayout.NORTH);
         panoInfo.add(pseudoLabel);
         panoInfo.add(pseudoText);
-        panoInfo3.add(difficulteLabel);
-        panoInfo3.add(difficulteBox);
         panoCentral.setLayout(new BoxLayout(panoCentral, BoxLayout.Y_AXIS));
         panoCentral.add(panoInfo);
         panoCentral.add(panoInfo3);
@@ -178,8 +171,6 @@ public class Launcher extends JFrame {
         panoInfo2.add(pseudo2Label);
         panoInfo.add(pseudoText);
         panoInfo2.add(pseudo2Text);
-        panoInfo3.add(difficulteLabel);
-        panoInfo3.add(difficulteBox);
         panoBouton.add(unJoueur);
         panoBouton.add(start);
         panoBouton.add(help);
