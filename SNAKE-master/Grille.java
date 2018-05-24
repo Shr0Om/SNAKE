@@ -231,9 +231,11 @@ class Grille extends JPanel {
         // commande pour le joueur 1 : les fleches
         if(t =='q' && pause == false){
             snake.tourne(1);
+            point = snake.getList().get(0);
         }
         if(t =='d' && pause == false){
             snake.tourne(2);
+            point = snake.getList().get(0);
         }
 
         // commande pour le joueur 2 : les nombres
