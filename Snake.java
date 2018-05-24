@@ -3,9 +3,11 @@ import javax.swing.JFrame;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 import java.lang.*;
+import java.util.ArrayList;
 
-public class Snake extends JFrame implements KeyListener {
+class Snake extends JFrame implements KeyListener {
 
     private Grille dessin;
 
@@ -13,11 +15,17 @@ public class Snake extends JFrame implements KeyListener {
     JTextArea s;
     JMenuBar mymbar;
     JMenu game, help, level;
-    JButton jenesaispas;
+    private int score1;
+    private String pseudo1;
+    private int score2;
+    private String pseudo2;
+    private int score3;
+    private String pseudo3;
+    ArrayList<Integer> records = new ArrayList<Integer>();
+    ArrayList<String> pseudo = new ArrayList<String>();
 
 
-
-    public Snake(int modeJeu) {
+    public Snake(int modeJeu, String pseudoJoueur) {
         super("SNAKE");
         // créer menu bar avec des fonctionnalités
         menuBar();
@@ -29,9 +37,9 @@ public class Snake extends JFrame implements KeyListener {
         addKeyListener(this);
 
         if (modeJeu == 1){
-            dessin = new Grille();
+            dessin = new Grille(pseudoJoueur);
         }else {
-            dessin = new Grille(2);
+            dessin = new Grille(2, pseudoJoueur);
         }
 
         JPanel grille = new JPanel();
@@ -49,10 +57,21 @@ public class Snake extends JFrame implements KeyListener {
         fenetreJeu.setLayout(new BorderLayout());
 
         p1 = new JPanel();
-        jenesaispas = new JButton("Super bouton trop cool !");
+        p1.setLayout(new BoxLayout(p1, BoxLayout.Y_AXIS));
 
-        JLabel afficheScore = new JLabel("Le score du joueur 1 :" + dessin.snake.score);
+        // appel de la fonction pour lire les meilleurs scores et les sauvegarder dans les variables
+        readScore();
+
+        JLabel afficheScore = new JLabel("Le score du joueur 1 :  " + dessin.snake.getScore() + " ");
+
+        JLabel afficheMeilleurScore1 = new JLabel(" 1 de " + pseudo1 + " : " + score1);
+        JLabel afficheMeilleurScore2 = new JLabel(" 2 de " + pseudo2 + " : " + score2);
+        JLabel afficheMeilleurScore3 = new JLabel(" 3 de " + pseudo3 + " : " + score3);
+
         p1.add(afficheScore);
+        p1.add(afficheMeilleurScore1);
+        p1.add(afficheMeilleurScore2);
+        p1.add(afficheMeilleurScore3);
         p1.setSize(300,600);
 
         fenetreJeu.add(grille, BorderLayout.WEST);
@@ -69,10 +88,10 @@ public class Snake extends JFrame implements KeyListener {
     // methode renvoyant la touche pressee dans la méthode touche
     public void keyPressed(KeyEvent e) {
         // si on presse sur les fleches de direction, on se dirige en fonction
-        if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+        if (e.getKeyCode() == KeyEvent.VK_Q) {
             dessin.touche('q');
         }
-        if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+        if (e.getKeyCode() == KeyEvent.VK_D) {
             dessin.touche('d');
         }
 
@@ -117,9 +136,7 @@ public class Snake extends JFrame implements KeyListener {
 //                        reset();
                     }
                 });
-
         exit.addActionListener(new ActionListener() {
-
             public void actionPerformed(ActionEvent e) {
                 dispose();
             }
@@ -128,13 +145,10 @@ public class Snake extends JFrame implements KeyListener {
         game.add(newgame);
         game.addSeparator();
         game.add(exit);
-
         mymbar.add(game);
 
         level = new JMenu("Niveau");
-
         mymbar.add(level);
-
         help = new JMenu("Help");
 
         JMenuItem creator = new JMenuItem("Information");
@@ -156,5 +170,61 @@ public class Snake extends JFrame implements KeyListener {
         mymbar.add(help);
 
         setJMenuBar(mymbar);
+    }
+
+
+
+    public void readScore(){
+
+        File file1 = new File("src\\score\\meilleurScore.txt");
+        File file2 = new File("src\\score\\pseudo.txt");
+
+        try {
+            // lecture des meilleurs scores dans fichier
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file1),"UTF-8"));
+            String line = reader.readLine();
+            System.out.println(line);
+            while (line != null){
+                int meilleurscore = Integer.parseInt(line);
+                records.add(meilleurscore);
+                line = reader.readLine();
+            }
+            score1 = records.get(0);
+            score2 = records.get(1);
+            score3 = records.get(2);
+            reader.close();
+
+            // lecture des pseudos associé aux meilleurs scores
+            reader = new BufferedReader(new InputStreamReader(new FileInputStream(file2),"UTF-8"));
+            line = reader.readLine();
+            System.out.println(line);
+            while (line != null){
+                pseudo.add(line);
+                line = reader.readLine();
+            }
+            pseudo1 = pseudo.get(0);
+            pseudo2 = pseudo.get(1);
+            pseudo3 = pseudo.get(2);
+
+            reader.close();
+            } catch (UnsupportedEncodingException e1) {
+            e1.printStackTrace();
+        } catch (FileNotFoundException e1) {
+            e1.printStackTrace();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+//        setRecords(records);
+//        setPseudo(pseudo);
+
+    }
+
+
+    public void setRecords(ArrayList<Integer> records) {
+        this.records = records;
+    }
+
+    public void setPseudo(ArrayList<Integer> pseudo) {
+//        this.pseudo = pseudo;
     }
 }
