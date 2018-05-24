@@ -18,6 +18,7 @@ class Grille extends JPanel {
     public Serpent snake, snake2;
     public Point tete;
     public Point queue;
+    public Point point;
     public Fruit pomme;
     public ArrayList<Obstacle> tabObstacle;
     public Bonus bonus;
@@ -59,7 +60,8 @@ class Grille extends JPanel {
         snake = new Serpent();
         tete = new Point();         // deux points qui serviront à recuperer les
         queue = new Point();        // coordonnees de la tete et de la queue du serpent
-
+        point = new Point();
+        
         pomme = new Fruit();
         bonus = new Bonus();
         gestionObstacle(nbObstacle);
@@ -83,7 +85,8 @@ class Grille extends JPanel {
         snake = new Serpent();
         tete = new Point();         // deux points qui serviront à recuperer les
         queue = new Point();        // coordonnees de la tete et de la queue du serpent
-
+        point = new Point();
+        
         snake2 = new Serpent();
         tete = new Point();
         queue = new Point();
@@ -110,7 +113,8 @@ class Grille extends JPanel {
         snake = new Serpent();
         tete = new Point();         // deux points qui serviront à recuperer les
         queue = new Point();        // coordonnees de la tete et de la queue du serpent
-
+        point = new Point();
+        
         snake2 = new Serpent();
         tete = new Point();
         queue = new Point();
@@ -133,7 +137,11 @@ class Grille extends JPanel {
         URL image9 = getClass().getResource("image/queueGauche.png");
         URL image10 = getClass().getResource("image/corpsHaut.png");
         URL image11 = getClass().getResource("image/corpsCote.png");
-        URL image12 = getClass().getResource("image/obstacle.png");
+        URL image12 = getClass().getResource("image/coudeDroit.png");
+        URL image13 = getClass().getResource("image/coudeGauche.png");
+        URL image14 = getClass().getResource("image/coudeJsp.png");
+        URL image15 = getClass().getResource("image/coudeJsp2.png");
+        URL image16 = getClass().getResource("image/obstacle.png");
 
         try {
             imagePomme = ImageIO.read(image1);
@@ -158,8 +166,17 @@ class Grille extends JPanel {
             imageCorpsHaut = imageCorpsHaut.getScaledInstance(10, 10, imageCorpsHaut.SCALE_DEFAULT);
             imageCorpsCote = ImageIO.read(image11);
             imageCorpsCote = imageCorpsCote.getScaledInstance(10, 10, imageCorpsCote.SCALE_DEFAULT);
-            imageObstacle = ImageIO.read(image12);
+            imageObstacle = ImageIO.read(image16);
             imageObstacle = imageObstacle.getScaledInstance(10, 10, imageObstacle.SCALE_DEFAULT);
+            imageCoudeDroit = ImageIO.read(image12);
+            imageCoudeDroit = imageCoudeDroit.getScaledInstance(10, 10, imageCoudeDroit.SCALE_DEFAULT);
+            imageCoudeGauche = ImageIO.read(image13);
+            imageCoudeGauche = imageCoudeGauche.getScaledInstance(10, 10, imageCoudeGauche.SCALE_DEFAULT);
+            imageCoudeBas = ImageIO.read(image14);
+            imageCoudeBas = imageCoudeBas.getScaledInstance(10, 10, imageCoudeBas.SCALE_DEFAULT);
+            imageCoudeHaut = ImageIO.read(image15);
+            imageCoudeHaut = imageCoudeHaut.getScaledInstance(10, 10, imageCoudeHaut.SCALE_DEFAULT);
+
         } catch (IOException e){
             e.printStackTrace();
         }
@@ -445,6 +462,7 @@ class Grille extends JPanel {
         if (etat == EtatJeu.JOUER) {
             //parcours de la liste avec un itérateur
             //on dessine le serpent
+
             for (Point p:snake.getList() ) {
 
                 if (p == tete) {
@@ -462,33 +480,128 @@ class Grille extends JPanel {
                     }
                 }
 
-                if (p == queue) {
-                    if (snake.directionSerpent == 2) {
-                        g.drawImage(imageQueueBas, p.x, p.y, this);
+                if (p == queue){
+                    if (snake.directionSerpent == 2){
+                        if (p.x < point.x){
+                            g.drawImage(imageQueueGauche, p.x, p.y, this);
+                            sens = 2;
+                        }
+                        if (p.x > point.x){
+                            sens = 1;
+                            g.drawImage(imageQueueDroite, p.x, p.y, this);
+                        }
+                        if (p.y < point.y){
+                            g.drawImage(imageQueueBas, p.x, p.y, this);
+                        }
                     }
-                    if (snake.directionSerpent == 0) {
-                        g.drawImage(imageQueueHaut, p.x, p.y, this);
+                    if (snake.directionSerpent == 0){
+                        if (p.x < point.x){
+                            g.drawImage(imageQueueGauche, p.x, p.y, this);
+                            sens = 4;
+                        }
+                        if (p.x > point.x){
+                            g.drawImage(imageQueueDroite, p.x, p.y, this);
+                            sens = 3;
+                        }
+                        if (p.y > point.y){
+                            g.drawImage(imageQueueHaut, p.x, p.y, this);
+                        }
                     }
-                    if (snake.directionSerpent == 1) {
-                        g.drawImage(imageQueueDroite, p.x, p.y, this);
+                    if (snake.directionSerpent == 1){
+                        if (p.y > point.y){
+                            g.drawImage(imageQueueBas, p.x, p.y, this);
+                            sens = 6;
+                        }
+                        if (p.y < point.y){
+                            g.drawImage(imageQueueHaut, p.x, p.y, this);
+                            sens = 5;
+                        }
+                        if (p.x < point.x){
+                            g.drawImage(imageQueueDroite, p.x, p.y, this);
+                        }
                     }
-                    if (snake.directionSerpent == 3) {
-                        g.drawImage(imageQueueGauche, p.x, p.y, this);
+                    if (snake.directionSerpent == 3){
+                        if (p.y > point.y){
+                            g.drawImage(imageQueueBas, p.x, p.y, this);
+                            sens = 8;
+                        }
+                        if (p.y < point.y){
+                            g.drawImage(imageQueueHaut, p.x, p.y, this);
+                            sens = 7;
+                        }
+                        if (p.x > point.x){
+                            g.drawImage(imageQueueGauche, p.x, p.y, this);
+                        }
                     }
                 }
 
-                if (p != tete && p!= queue){
-                    if (snake.directionSerpent == 2) {
-                        g.drawImage(imageCorpsHaut, p.x, p.y, this);
+                if (p != tete){
+                    if (snake.directionSerpent == 2){
+                        if (p!= queue){
+                            if (point.x == p.x ) {
+                                g.drawImage(imageCorpsHaut, p.x, p.y, this);
+                            }
+                            else{
+                                g.drawImage(imageCorpsCote, p.x, p.y, this);
+                            }
+                            if (point == p && sens == 1){
+                                g.drawImage(imageCoudeGauche, p.x, p.y, this);
+                            }
+                            if (point == p && sens == 2){
+                                g.drawImage(imageCoudeDroit, p.x, p.y, this);
+                            }
+                        }
                     }
+
                     if (snake.directionSerpent == 0) {
-                        g.drawImage(imageCorpsHaut, p.x, p.y, this);
+                        if (p != queue) {
+                            if (p.y == point.y) {
+                                g.drawImage(imageCorpsCote, p.x, p.y, this);
+                            }
+                            else {
+                                g.drawImage(imageCorpsHaut, p.x, p.y, this);
+                            }
+                            if (point == p && sens == 3){
+                                g.drawImage(imageCoudeHaut, p.x, p.y, this);
+                            }
+                            if (point == p && sens == 4){
+                                g.drawImage(imageCoudeBas, p.x, p.y, this);
+                            }
+                        }
                     }
+
                     if (snake.directionSerpent == 1) {
-                        g.drawImage(imageCorpsCote, p.x, p.y, this);
+                        if (p != queue) {
+                            if (p.x == point.x) {
+                                g.drawImage(imageCorpsHaut, p.x, p.y, this);
+                            }
+                            else {
+                                g.drawImage(imageCorpsCote, p.x, p.y, this);
+                            }
+                            if (point == p && sens == 5){
+                                g.drawImage(imageCoudeDroit, p.x, p.y, this);
+                            }
+                            if (point == p && sens == 6){
+                                g.drawImage(imageCoudeBas, p.x, p.y, this);
+                            }
+                        }
                     }
+
                     if (snake.directionSerpent == 3) {
-                        g.drawImage(imageCorpsCote, p.x, p.y, this);
+                        if (p != queue){
+                            if (p.x == point.x ) {
+                                g.drawImage(imageCorpsHaut, p.x, p.y, this);
+                            }
+                            else{
+                                g.drawImage(imageCorpsCote, p.x, p.y, this);
+                            }
+                            if (point == p && sens == 7){
+                                g.drawImage(imageCoudeGauche, p.x, p.y, this);
+                            }
+                            if (point == p && sens == 8){
+                                g.drawImage(imageCoudeHaut, p.x, p.y, this);
+                            }
+                        }
                     }
                 }
             }
@@ -508,5 +621,4 @@ class Grille extends JPanel {
             }
         }
     }
-
 }
