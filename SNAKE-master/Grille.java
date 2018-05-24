@@ -26,7 +26,7 @@ class Grille extends JPanel {
     // définie le niveau du joueur et défini en fonction de cela la vitesse du serpent
     public int niveau;
     public int vitesse;
-
+    public int sens = -1;
     public int nbObstacle;
     public int tabNbObstacle[] = {0,10,15,20,25,7,8,9,10};
 
