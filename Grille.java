@@ -197,6 +197,8 @@ class Grille extends JPanel {
                     gereColision(snake);
                     gameOver();
                     repaint();           //on redessine tous les éléments de la grille
+
+
                 }else {
                     snake.avancerSerpent();
                     snake2.avancerSerpent();
@@ -435,7 +437,7 @@ class Grille extends JPanel {
             g.setColor(Color.black);
             g.setFont(new Font("Arial", 15, 20));
             for (int i=0; i<messageMort.size(); i++){
-                g.drawString(messageMort.get(i), 300 , 150);
+                g.drawString(messageMort.get(i), 300 , 150+i*20);
             }
 
             g.setColor(Color.black);
@@ -468,6 +470,11 @@ class Grille extends JPanel {
         queue = snake.getList().get(snake.getList().size() - 1);
 
         if (etat == EtatJeu.JOUER) {
+
+            g.setColor(Color.black);
+            g.setFont(new Font("Arial", 0, 19));
+            g.drawString("Score : "+ snake.getScore(), 10, 30);
+
             //parcours de la liste avec un itérateur
             //on dessine le serpent
 
@@ -693,10 +700,6 @@ class Grille extends JPanel {
         } catch (IOException e1) {
             e1.printStackTrace();
         }
-    }
-
-    public ArrayList<Integer> getMeilleurScore() {
-        return meilleurScore;
     }
 
 }
