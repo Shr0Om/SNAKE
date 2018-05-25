@@ -21,6 +21,7 @@ class Snake extends JFrame implements KeyListener {
     private String pseudo2;
     private int score3;
     private String pseudo3;
+    public JLabel afficheScore;
     ArrayList<Integer> records = new ArrayList<Integer>();
     ArrayList<String> pseudo = new ArrayList<String>();
 
@@ -62,11 +63,11 @@ class Snake extends JFrame implements KeyListener {
         // appel de la fonction pour lire les meilleurs scores et les sauvegarder dans les variables
         readScore();
 
-        JLabel afficheScore = new JLabel("Le score du joueur 1 :  " + dessin.snake.getScore() + " ");
+        afficheScore = new JLabel("Les meilleurs scores :      ");
 
-        JLabel afficheMeilleurScore1 = new JLabel(" 1 de " + pseudo1 + " : " + score1);
-        JLabel afficheMeilleurScore2 = new JLabel(" 2 de " + pseudo2 + " : " + score2);
-        JLabel afficheMeilleurScore3 = new JLabel(" 3 de " + pseudo3 + " : " + score3);
+        JLabel afficheMeilleurScore1 = new JLabel(" 1 : " + pseudo1 + " : " + score1);
+        JLabel afficheMeilleurScore2 = new JLabel(" 2 : " + pseudo2 + " : " + score2);
+        JLabel afficheMeilleurScore3 = new JLabel(" 3 : " + pseudo3 + " : " + score3);
 
         p1.add(afficheScore);
         p1.add(afficheMeilleurScore1);
@@ -214,17 +215,6 @@ class Snake extends JFrame implements KeyListener {
         } catch (IOException e1) {
             e1.printStackTrace();
         }
-//        setRecords(records);
-//        setPseudo(pseudo);
 
-    }
-
-
-    public void setRecords(ArrayList<Integer> records) {
-        this.records = records;
-    }
-
-    public void setPseudo(ArrayList<Integer> pseudo) {
-//        this.pseudo = pseudo;
     }
 }
