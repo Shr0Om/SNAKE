@@ -16,14 +16,15 @@ class Grille extends JPanel {
     private int pointJoueur1 = 0;
     private ArrayList<Integer> meilleurScore = new ArrayList<Integer>();
     private ArrayList<String> meilleurPseudo = new ArrayList<String>();
+    private ArrayList<Point> listePoints = new ArrayList<Point>();
 
     public Serpent snake, snake2;
     public Point tete;
     public Point queue;
-    public Point point;
     public Fruit pomme;
     public ArrayList<Obstacle> tabObstacle;
     public Bonus bonus;
+    public  int nombreMouv = 0;
 
     // définie le niveau du joueur et défini en fonction de cela la vitesse du serpent
     public int niveau;
@@ -62,7 +63,7 @@ class Grille extends JPanel {
         snake = new Serpent(pseudo);
         tete = new Point();         // deux points qui serviront à recuperer les
         queue = new Point();        // coordonnees de la tete et de la queue du serpent
-        point = new Point();
+        listePoints.add(snake.getList().get(0));
 
         pomme = new Fruit();
         bonus = new Bonus();
@@ -87,11 +88,11 @@ class Grille extends JPanel {
         snake = new Serpent(pseudo);
         tete = new Point();         // deux points qui serviront à recuperer les
         queue = new Point();        // coordonnees de la tete et de la queue du serpent
-        point = new Point();
 
         snake2 = new Serpent(pseudo);
         tete = new Point();
         queue = new Point();
+        listePoints.add(snake.getList().get(0));
 
         pomme = new Fruit();
         bonus = new Bonus();
@@ -116,7 +117,7 @@ class Grille extends JPanel {
         snake = new Serpent(snake.getScore());
         tete = new Point();         // deux points qui serviront à recuperer les
         queue = new Point();        // coordonnees de la tete et de la queue du serpent
-        point = new Point();
+        listePoints.add(snake.getList().get(0));
 
         if (modeJeu == 2){
             snake2 = new Serpent(snake2.getScore());
@@ -238,11 +239,14 @@ class Grille extends JPanel {
         // commande pour le joueur 1 : les fleches
         if(t =='q' && pause == false){
             snake.tourne(1);
-            point = snake.getList().get(0);
+            listePoints.add(snake.getList().get(0));
+            nombreMouv++;
+
         }
         if(t =='d' && pause == false){
             snake.tourne(2);
-            point = snake.getList().get(0);
+            listePoints.add(snake.getList().get(0));
+            nombreMouv++;
         }
 
         // commande pour le joueur 2 : les nombres
@@ -479,7 +483,6 @@ class Grille extends JPanel {
             //on dessine le serpent
 
             for (Point p:snake.getList() ) {
-
                 if (p == tete) {
                     if (snake.directionSerpent == 2) {
                         g.drawImage(imageTeteHaute, p.x, p.y, this);
@@ -494,132 +497,14 @@ class Grille extends JPanel {
                         g.drawImage(imageTeteDroite, p.x, p.y, this);
                     }
                 }
-
-                if (p == queue){
-                    if (snake.directionSerpent == 2){
-                        if (p.x < point.x){
-                            g.drawImage(imageQueueGauche, p.x, p.y, this);
-                            sens = 2;
-                        }
-                        if (p.x > point.x){
-                            sens = 1;
-                            g.drawImage(imageQueueDroite, p.x, p.y, this);
-                        }
-                        if (p.y < point.y){
-                            g.drawImage(imageQueueBas, p.x, p.y, this);
-                        }
-                    }
-                    if (snake.directionSerpent == 0){
-                        if (p.x < point.x){
-                            g.drawImage(imageQueueGauche, p.x, p.y, this);
-                            sens = 4;
-                        }
-                        if (p.x > point.x){
-                            g.drawImage(imageQueueDroite, p.x, p.y, this);
-                            sens = 3;
-                        }
-                        if (p.y > point.y){
-                            g.drawImage(imageQueueHaut, p.x, p.y, this);
-                        }
-                    }
-                    if (snake.directionSerpent == 1){
-                        if (p.y > point.y){
-                            g.drawImage(imageQueueBas, p.x, p.y, this);
-                            sens = 6;
-                        }
-                        if (p.y < point.y){
-                            g.drawImage(imageQueueHaut, p.x, p.y, this);
-                            sens = 5;
-                        }
-                        if (p.x < point.x){
-                            g.drawImage(imageQueueDroite, p.x, p.y, this);
-                        }
-                    }
-                    if (snake.directionSerpent == 3){
-                        if (p.y > point.y){
-                            g.drawImage(imageQueueBas, p.x, p.y, this);
-                            sens = 8;
-                        }
-                        if (p.y < point.y){
-                            g.drawImage(imageQueueHaut, p.x, p.y, this);
-                            sens = 7;
-                        }
-                        if (p.x > point.x){
-                            g.drawImage(imageQueueGauche, p.x, p.y, this);
-                        }
-                    }
-                }
-
-                if (p != tete){
-                    if (snake.directionSerpent == 2){
-                        if (p!= queue){
-                            if (point.x == p.x ) {
-                                g.drawImage(imageCorpsHaut, p.x, p.y, this);
-                            }
-                            else{
-                                g.drawImage(imageCorpsCote, p.x, p.y, this);
-                            }
-                            if (point == p && sens == 1){
-                                g.drawImage(imageCoudeGauche, p.x, p.y, this);
-                            }
-                            if (point == p && sens == 2){
-                                g.drawImage(imageCoudeDroit, p.x, p.y, this);
-                            }
-                        }
-                    }
-
-                    if (snake.directionSerpent == 0) {
-                        if (p != queue) {
-                            if (p.y == point.y) {
-                                g.drawImage(imageCorpsCote, p.x, p.y, this);
-                            }
-                            else {
-                                g.drawImage(imageCorpsHaut, p.x, p.y, this);
-                            }
-                            if (point == p && sens == 3){
-                                g.drawImage(imageCoudeHaut, p.x, p.y, this);
-                            }
-                            if (point == p && sens == 4){
-                                g.drawImage(imageCoudeBas, p.x, p.y, this);
-                            }
-                        }
-                    }
-
-                    if (snake.directionSerpent == 1) {
-                        if (p != queue) {
-                            if (p.x == point.x) {
-                                g.drawImage(imageCorpsHaut, p.x, p.y, this);
-                            }
-                            else {
-                                g.drawImage(imageCorpsCote, p.x, p.y, this);
-                            }
-                            if (point == p && sens == 5){
-                                g.drawImage(imageCoudeDroit, p.x, p.y, this);
-                            }
-                            if (point == p && sens == 6){
-                                g.drawImage(imageCoudeBas, p.x, p.y, this);
-                            }
-                        }
-                    }
-
-                    if (snake.directionSerpent == 3) {
-                        if (p != queue){
-                            if (p.x == point.x ) {
-                                g.drawImage(imageCorpsHaut, p.x, p.y, this);
-                            }
-                            else{
-                                g.drawImage(imageCorpsCote, p.x, p.y, this);
-                            }
-                            if (point == p && sens == 7){
-                                g.drawImage(imageCoudeGauche, p.x, p.y, this);
-                            }
-                            if (point == p && sens == 8){
-                                g.drawImage(imageCoudeHaut, p.x, p.y, this);
-                            }
-                        }
-                    }
-                }
             }
+            if (listePoints.size() > 1){
+                mouvementSerpent(g, listePoints.get(nombreMouv), listePoints.get(nombreMouv -1));
+            }else{
+                mouvementSerpent(g, listePoints.get(nombreMouv), listePoints.get(nombreMouv));
+            }
+
+
             if (modeJeu == 2){
                 for (Point p:snake2.getList() ) {
                     g.setColor(Color.red);
@@ -637,6 +522,136 @@ class Grille extends JPanel {
         }
     }
 
+    public void mouvementSerpent(Graphics g, Point point, Point point2){
+        for (Point p:snake.getList()) {
+            if (p == queue){
+                if (snake.directionSerpent == 2){
+                    if (p.x < point.x && p.y == point2.y){
+                        g.drawImage(imageQueueGauche, p.x, p.y, this);
+                        sens = 2;
+                    }
+                    if (p.x > point.x && p.y == point2.y){
+                        sens = 1;
+                        g.drawImage(imageQueueDroite, p.x, p.y, this);
+                    }
+                    if (p.x == point.x ||p.x == point2.x){
+                        g.drawImage(imageQueueBas, p.x, p.y, this);
+                    }
+                    if (p.x == point2.x && p.y < point2.y){
+                        g.drawImage(imageQueueHaut, p.x, p.y, this);
+                    }
+                }
+                if (snake.directionSerpent == 0){
+                    if (p.x < point.x && p.y == point2.y){
+                        g.drawImage(imageQueueGauche, p.x, p.y, this);
+                        sens = 4;
+                    }
+                    if (p.x > point.x && p.y == point2.y){
+                        g.drawImage(imageQueueDroite, p.x, p.y, this);
+                        sens = 3;
+                    }
+                    if (p.x == point.x ||p.x == point2.x){
+                        g.drawImage(imageQueueHaut, p.x, p.y, this);
+                    }
+                    if (p.x == point2.x && p.y > point2.y){
+                        g.drawImage(imageQueueBas, p.x, p.y, this);
+                    }
+                }
+                if (snake.directionSerpent == 1){
+                    if (p.y > point.y && p.x == point2.x){
+                        g.drawImage(imageQueueBas, p.x, p.y, this);
+                        sens = 6;
+                    }
+                    if (p.y < point.y && p.x == point2.x){
+                        g.drawImage(imageQueueHaut, p.x, p.y, this);
+                        sens = 5;
+                    }
+                    if (p.y == point.y || p.y == point2.y){
+                        g.drawImage(imageQueueDroite, p.x, p.y, this);
+                    }
+                    if (p.y == point2.y && p.x < point2.x){
+                        g.drawImage(imageQueueGauche, p.x, p.y, this);
+                    }
+                }
+                if (snake.directionSerpent == 3){
+                    if (p.y > point.y && p.x == point2.x){
+                        g.drawImage(imageQueueBas, p.x, p.y, this);
+                        sens = 8;
+                    }
+                    if (p.y < point.y && p.x == point2.x){
+                        g.drawImage(imageQueueHaut, p.x, p.y, this);
+                        sens = 7;
+                    }
+                    if (p.y == point.y || p.y == point2.y){
+                        g.drawImage(imageQueueGauche, p.x, p.y, this);
+                    }
+                    if (p.y == point2.y && p.x > point2.x){
+                        g.drawImage(imageQueueDroite, p.x, p.y, this);
+                    }
+                }
+            }
+
+            //Image Corps
+            if (p != tete && snake.directionSerpent == 2 && p!= queue) {
+
+                if (point.x == p.x || point2.x == p.x) {
+                    g.drawImage(imageCorpsHaut, p.x, p.y, this);
+                } else {
+                    g.drawImage(imageCorpsCote, p.x, p.y, this);
+                }
+                if ((point == p || point2 == p) && sens == 1) {
+                    g.drawImage(imageCoudeGauche, p.x, p.y, this);
+                }
+                if ((point == p || point2 == p) && sens == 2) {
+                    g.drawImage(imageCoudeDroit, p.x, p.y, this);
+                }
+            }
+            if (p != tete && snake.directionSerpent == 0 && p!= queue) {
+                if (p.y == point.y) {
+                    g.drawImage(imageCorpsCote, p.x, p.y, this);
+                }
+                else {
+                    g.drawImage(imageCorpsHaut, p.x, p.y, this);
+                }
+                if ((point == p || point2 == p) && sens == 3){
+                    g.drawImage(imageCoudeHaut, p.x, p.y, this);
+                }
+                if ((point == p || point2 == p) && sens == 4){
+                    g.drawImage(imageCoudeBas, p.x, p.y, this);
+                }
+            }
+
+            if (p != tete && snake.directionSerpent == 1 && p!= queue) {
+                if (p.x == point.x) {
+                    g.drawImage(imageCorpsHaut, p.x, p.y, this);
+                }
+                else {
+                    g.drawImage(imageCorpsCote, p.x, p.y, this);
+                }
+                if ((point == p || point2 == p) && sens == 5){
+                    g.drawImage(imageCoudeDroit, p.x, p.y, this);
+                }
+                if ((point == p || point2 == p) && sens == 6){
+                    g.drawImage(imageCoudeBas, p.x, p.y, this);
+                }
+            }
+
+            if (p != tete && snake.directionSerpent == 3 && p!= queue) {
+                if (p.x == point.x) {
+                    g.drawImage(imageCorpsHaut, p.x, p.y, this);
+                }
+                else{
+                    g.drawImage(imageCorpsCote, p.x, p.y, this);
+                }
+                if ((point == p || point2 == p) && sens == 7){
+                    g.drawImage(imageCoudeGauche, p.x, p.y, this);
+                }
+                if ((point == p || point2 == p) && sens == 8){
+                    g.drawImage(imageCoudeHaut, p.x, p.y, this);
+                }
+            }
+        }
+    }
 
     public void ecrireScore(){
 
