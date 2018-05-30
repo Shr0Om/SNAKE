@@ -482,22 +482,6 @@ class Grille extends JPanel {
             //parcours de la liste avec un itérateur
             //on dessine le serpent
 
-            for (Point p:snake.getList() ) {
-                if (p == tete) {
-                    if (snake.directionSerpent == 2) {
-                        g.drawImage(imageTeteHaute, p.x, p.y, this);
-                    }
-                    if (snake.directionSerpent == 0) {
-                        g.drawImage(imageTeteBas, p.x, p.y, this);
-                    }
-                    if (snake.directionSerpent == 1) {
-                        g.drawImage(imageTeteGauche, p.x, p.y, this);
-                    }
-                    if (snake.directionSerpent == 3) {
-                        g.drawImage(imageTeteDroite, p.x, p.y, this);
-                    }
-                }
-            }
             if (listePoints.size() > 1){
                 mouvementSerpent(g, listePoints.get(nombreMouv), listePoints.get(nombreMouv -1));
             }else{
@@ -524,6 +508,22 @@ class Grille extends JPanel {
 
     public void mouvementSerpent(Graphics g, Point point, Point point2){
         for (Point p:snake.getList()) {
+
+            if (p == tete) {
+                if (snake.directionSerpent == 2) {
+                    g.drawImage(imageTeteHaute, p.x, p.y, this);
+                }
+                if (snake.directionSerpent == 0) {
+                    g.drawImage(imageTeteBas, p.x, p.y, this);
+                }
+                if (snake.directionSerpent == 1) {
+                    g.drawImage(imageTeteGauche, p.x, p.y, this);
+                }
+                if (snake.directionSerpent == 3) {
+                    g.drawImage(imageTeteDroite, p.x, p.y, this);
+                }
+            }
+
             if (p == queue){
                 if (snake.directionSerpent == 2){
                     if (p.x < point.x && p.y == point2.y){
