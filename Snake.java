@@ -26,7 +26,7 @@ class Snake extends JFrame implements KeyListener {
     ArrayList<String> pseudo = new ArrayList<String>();
 
 
-    public Snake(int modeJeu, String pseudoJoueur) {
+    public Snake(int modeJeu, String pseudoJoueur, String pseudoJoueur2) {
         super("SNAKE");
         // créer menu bar avec des fonctionnalités
         menuBar();
@@ -38,9 +38,10 @@ class Snake extends JFrame implements KeyListener {
         addKeyListener(this);
 
         if (modeJeu == 1){
-            dessin = new Grille(pseudoJoueur);
-        }else {
-            dessin = new Grille(2, pseudoJoueur);
+            dessin = new Grille(1, pseudoJoueur);
+        }
+        if (modeJeu == 2){
+            dessin = new Grille(2, pseudoJoueur, pseudoJoueur2);
         }
 
         JPanel grille = new JPanel();
