@@ -6,6 +6,7 @@ class Serpent{
 
     private String pseudoJoueur;
     private ArrayList<Point> listePoint;        //liste contenant les coordonnées des points
+    private ArrayList<Integer> listeDirection;        //liste contenant de la direction du serpent
     //qui composent le serpent
     private static final int longueur = 50;
     private static final int largeur = 70;
@@ -17,6 +18,7 @@ class Serpent{
 
         pseudoJoueur = pseudo;
         listePoint = new ArrayList<Point>();
+        listeDirection = new ArrayList<Integer>();
         Random r = new Random();
         //on determine aleatoirement la position du serpent
         int x = Math.abs(r.nextInt() % largeur);
@@ -38,11 +40,16 @@ class Serpent{
         listePoint.add(new Point(x + 10,y));
         listePoint.add(new Point(x,y));
 
+        for (int i = 0; i < 6 ; i++) {
+            listeDirection.add(directionSerpent);
+        }
+
         score = 0;
     }
 
-    public Serpent(int score){
+    public Serpent(String pseudo, int score){
 
+        pseudoJoueur = pseudo;
         this.score = score;
         listePoint = new ArrayList<Point>();
         Random r = new Random();
@@ -66,7 +73,10 @@ class Serpent{
         listePoint.add(new Point(x + 10,y));
         listePoint.add(new Point(x,y));
 
-        score = 0;
+        for (int i = 0; i < 6 ; i++) {
+            listeDirection.add(directionSerpent);
+        }
+
     }
 
     void tourne(int touche) {
@@ -89,6 +99,10 @@ class Serpent{
         return listePoint;
     }
 
+    ArrayList<Integer> getListeDirection(){
+        return listeDirection;
+    }
+
     // gere le deplacement du serpent et les changements de direction
     public void avancerSerpent(){
 
@@ -108,6 +122,9 @@ class Serpent{
                 tete.x = tete.x + 10;
                 break;
         }
+
+        listeDirection.add(0, directionSerpent);
+        listeDirection.add(listeDirection.size()-1);
 
         listePoint.add(0,new Point (tete.x, tete.y));
         listePoint.remove(listePoint.size()-1);
