@@ -8,7 +8,7 @@ public class Launcher extends JFrame {
     private JLabel pseudoLabel, titre, pseudo2Label, titreHelp;
     private JFrame frame3;
     private JPanel panoTitre, panoInfo, panoInfo2, panoInfo3, panoBouton, panoGlobal, panoCentral;
-    private JButton start, help, multijoueur, unJoueur;
+    private JButton start, help, multijoueur, unJoueur, meilleurScore;
     private JTextField pseudoText, pseudo2Text;
     private JOptionPane erreur;
     private JDialog erreurDialog;
@@ -61,12 +61,12 @@ public class Launcher extends JFrame {
                     erreurDialog = erreur.createDialog(start, "Erreur");
                 }
                 if(unPlayer && verification){
-                    Snake frame = new Snake(1, pseudoText.getText());
+                    Snake frame = new Snake(1, pseudoText.getText(), "");
                     frame.pack();
                     frame.setVisible(true);
                 }
                 if (multi && verification){
-                    Snake frame = new Snake(2, pseudoText.getText());
+                    Snake frame = new Snake(2, pseudoText.getText(), pseudo2Text.getText());
                     frame.pack();
                     frame.setVisible(true);
                 }
