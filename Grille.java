@@ -13,12 +13,11 @@ class Grille extends JPanel {
 
     private int modeJeu = 1;
 
-    private ArrayList<Integer> meilleurScore = new ArrayList<Integer>();
-    private ArrayList<String> meilleurPseudo = new ArrayList<String>();
+    private MeilleurScore meilleurScore = new MeilleurScore();
 
     private Serpent snake, snake2;
-    private Point tete, tete1, tete2;
-    private Point queue, queue1, queue2;
+    private Point tete1, tete2;
+    private Point queue1, queue2;
 
     private Fruit pomme;
     private ArrayList<Obstacle> tabObstacle;
@@ -152,7 +151,7 @@ class Grille extends JPanel {
 
         URL image1 = getClass().getResource("image/apple.png");
         URL image16 = getClass().getResource("image/obstacle.png");
-        URL image17 = getClass().getResource("image/imageBonus.png");
+        URL image17 = getClass().getResource("image/bonus.png");
         URL image2 = getClass().getResource("image/teteHaut.png");
         URL image3 = getClass().getResource("image/teteBas.png");
         URL image4 = getClass().getResource("image/teteDroite.png");
@@ -247,7 +246,6 @@ class Grille extends JPanel {
             imageCoudeHaut2 = imageCoudeHaut2.getScaledInstance(10, 10, imageCoudeHaut2.SCALE_DEFAULT);
             imageBonus = ImageIO.read(image17);
             imageBonus = imageBonus.getScaledInstance(10, 10, imageBonus.SCALE_DEFAULT);
-
         } catch (IOException e){
             e.printStackTrace();
         }
@@ -260,12 +258,8 @@ class Grille extends JPanel {
             public void run() {
                 tempPomme ++;
                 tempsBonus ++;
-                tempsInversion++;
+                tempsInversion ++;
 
-                if (tempsInversion > 150){
-                    malusInversion = false;
-                    tempsInversion = 0;
-                }
 
                 if (modeJeu == 1 ){
                     snake.avancerSerpent();
@@ -287,11 +281,15 @@ class Grille extends JPanel {
                     tempPomme = 0;
                 }
 
+                if (tempsInversion > 150){
+                    malusInversion = false;
+                    tempsInversion = 0;
+                }
                 if (tempsBonus == apparitionBonus){
                     bonus = new Bonus();
                     bonusOuPasBonus = true;
+//                    priseBonus = true;
                 }
-
                 if (bonusOuPasBonus){
                     if (tempsBonus == 40){
                         bonusOuPasBonus = false;
@@ -329,6 +327,10 @@ class Grille extends JPanel {
 
         if (messageMort.size() > 1){
             etat = EtatJeu.GAMEOVER;
+            meilleurScore.ecrireScore(snake.getScore(), snake.getPseudoJoueur());
+            if (modeJeu == 2){
+                meilleurScore.ecrireScore(snake2.getScore(), snake2.getPseudoJoueur());
+            }
             repaint();
             timer.cancel();
         }
@@ -338,14 +340,16 @@ class Grille extends JPanel {
 
         // commande pour le joueur 1 : les fleches
         if(t =='q' && pause == false){
-            if (malusInversion && tempsInversion < 150){
+            if (malusInversion && tempsInversion <150){
                 snake.tourne(2);
             }else {
                 snake.tourne(1);
+                malusInversion = false;
+                tempsInversion = 0;
             }
         }
         if(t =='d' && pause == false){
-            if (malusInversion && tempsInversion < 150){
+            if (malusInversion && tempsInversion <150){
                 snake.tourne(1);
             }else {
                 snake.tourne(2);
@@ -433,7 +437,7 @@ class Grille extends JPanel {
         }
 
         // pour vérifier si il ne va pas a l'exterieur du plateau
-        if (tete.x < 10 || tete.y > 560 || tete.x > 790 || tete.y < 10){
+        if (tete.x < 10 || tete.y > 510 || tete.x > 770 || tete.y < 10){
             if (modeJeu == 1 ){
                 messageMort.add(s.getPseudoJoueur() + " s'est pris un mur");
                 messageMort.add("Score : " + s.getScore());
@@ -450,6 +454,12 @@ class Grille extends JPanel {
             while(true){
                 for(Point serpent : s.getList()){                   // condition pour vérifier si la pomme n'apparait
                     if(pomme.p.x == serpent.x && pomme.p.y == serpent.y){   // pas sur le snake, sinon on recommence
+                        pomme = new Fruit();
+                        tempPomme = 0;
+                    }
+                }
+                for(Obstacle obstacle : tabObstacle ){                   // condition pour vérifier si la pomme n'apparait
+                    if(pomme.p.x == obstacle.p.x && pomme.p.y == obstacle.p.y){   // pas sur un obstacle, sinon on recommence
                         pomme = new Fruit();
                         tempPomme = 0;
                     }
@@ -556,21 +566,21 @@ class Grille extends JPanel {
         super.paintComponent(g);
 
         if(etat == EtatJeu.GAMEOVER){
-            ecrireScore();
+//            ecrireScore();
             g.setColor(Color.black);
             g.setFont(new Font("Arial", 15, 50));
-            g.drawString("GAME OVER", 200 , 100);
+            g.drawString("GAME OVER", 240 , 100);
 
             g.setColor(Color.black);
-            g.setFont(new Font("Arial", 15, 20));
+            g.setFont(new Font("Century Gothic", 15, 20));
             for (int i=0; i<messageMort.size(); i++){
-                g.drawString(messageMort.get(i), 300 , 150+i*20);
+                g.drawString(messageMort.get(i), 280 , 170+i*20);
             }
 
             g.setColor(Color.black);
-            g.setFont(new Font("Arial", 0, 20));
-            g.drawString("Appuyer sur la touche Entrée pour retourner à la page d'accueil ", 80, 480);
-            g.drawString("Appuyer sur Echap pour quitter", 225, 550);
+            g.setFont(new Font("Century Gothic", 0, 20));
+            g.drawString("Appuyer sur la touche Entrée pour retourner à la page d'accueil ", 80, 450);
+            g.drawString("Appuyer sur Echap pour quitter", 225, 500);
         }
 
         if(etat == EtatJeu.PAUSE){
@@ -579,8 +589,8 @@ class Grille extends JPanel {
             g.drawString("PAUSE", 300 , 100);
 
             g.setColor(Color.black);
-            g.setFont(new Font("Arial", 15, 40));
-            g.drawString("Niveau " + String.valueOf(niveau), 300 , 150);
+            g.setFont(new Font("Century Gothic", 15, 40));
+            g.drawString("Niveau " + String.valueOf(niveau), 300 , 160);
 
             g.setColor(Color.red);
             g.setFont(new Font("Arial", 0, 19));
@@ -588,9 +598,9 @@ class Grille extends JPanel {
             g.drawString("D pour aller à droite", 420, 300);
 
             g.setColor(Color.black);
-            g.setFont(new Font("Arial", 0, 20));
-            g.drawString("Appuyer sur Espace pour démarrer", 225, 500);
-            g.drawString("Appuyer sur Echap pour quitter le jeu", 225, 550);
+            g.setFont(new Font("Century Gothic", 0, 20));
+            g.drawString("Appuyer sur Espace pour démarrer", 225, 450);
+            g.drawString("Appuyer sur Echap pour quitter le jeu", 225, 500);
         }
 
         tete1 = snake.getList().get(0);
@@ -599,14 +609,11 @@ class Grille extends JPanel {
         if (etat == EtatJeu.JOUER) {
 
             g.setColor(Color.black);
-            g.setFont(new Font("Arial", 0, 19));
-            g.drawString("Score : "+ snake.getScore(), 10, 35);
-            g.setFont(new Font("Arial", 0, 19));
-            g.drawString("Niveau : "+ niveau, 10, 55);
+            g.setFont(new Font("Century Gothic", 0, 19));
+            g.drawString("Niveau : "+ niveau, 10, 30);
+            g.setFont(new Font("Century Gothic", 0, 19));
+            g.drawString("Score : "+ snake.getScore(), 10, 50);
 
-            if (malusInversion){
-                g.drawString("Malus : " + tempsInversion + "/ 150", 10, 15);
-            }
 
             //parcours de la liste avec un itérateur
             //on dessine le serpent
@@ -785,67 +792,5 @@ class Grille extends JPanel {
         }
     }
 
-
-    public void ecrireScore(){
-
-        File file1 = new File("src/score/meilleurScore.txt");
-        File file2 = new File("src/score/pseudo.txt");
-
-        readScore();
-
-        try {
-            PrintWriter writer = new PrintWriter(file1, "UTF-8");
-            PrintWriter writerPseudo = new PrintWriter(file2, "UTF-8");
-            int compteurAjoutMeilleurScore = 0;     // variable permettant de n'ajouter qu'une seule fois le score si il est meilleur
-
-            for (int i = 0; i < 3; i++) {
-                if (meilleurScore.get(i) < snake.getScore() && compteurAjoutMeilleurScore == 0){
-                    meilleurScore.add(i, snake.getScore());
-                    meilleurPseudo.add(i, snake.getPseudoJoueur());
-                    compteurAjoutMeilleurScore ++;
-                }
-                writer.println(meilleurScore.get(i));
-                writerPseudo.println(meilleurPseudo.get(i));
-            }
-            writer.close();
-            writerPseudo.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    public void readScore(){
-
-        File file = new File("src/score/meilleurScore.txt");
-        File file2 = new File("src/score/pseudo.txt");
-
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file),"UTF-8"));
-            String line = reader.readLine();
-
-            while (line != null){
-                int meilleurscore = Integer.parseInt(line);
-                meilleurScore.add(meilleurscore);
-                line = reader.readLine();
-            }
-            reader.close();
-
-            reader = new BufferedReader(new InputStreamReader(new FileInputStream(file2),"UTF-8"));
-            line = reader.readLine();
-            while (line != null){
-                meilleurPseudo.add(line);
-                line = reader.readLine();
-            }
-            reader.close();
-
-        } catch (UnsupportedEncodingException e1) {
-            e1.printStackTrace();
-        } catch (FileNotFoundException e1) {
-            e1.printStackTrace();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-    }
 
 }
