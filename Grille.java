@@ -151,7 +151,7 @@ class Grille extends JPanel {
 
         URL image1 = getClass().getResource("image/apple.png");
         URL image16 = getClass().getResource("image/obstacle.png");
-        URL image17 = getClass().getResource("image/bonus.png");
+        URL image17 = getClass().getResource("image/imageBonus.png");
         URL image2 = getClass().getResource("image/teteHaut.png");
         URL image3 = getClass().getResource("image/teteBas.png");
         URL image4 = getClass().getResource("image/teteDroite.png");
