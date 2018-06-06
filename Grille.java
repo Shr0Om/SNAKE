@@ -33,6 +33,7 @@ class Grille extends JPanel {
     private Bonus bonus;
     private int apparitionBonus = 0;
     private int tempsBonus = 0;
+    private int tempsInversion = 0;
     private boolean bonusOuPasBonus = false;
     private boolean malusInversion = false;
     private int dureeBonus = 0;
@@ -151,7 +152,7 @@ class Grille extends JPanel {
 
         URL image1 = getClass().getResource("image/apple.png");
         URL image16 = getClass().getResource("image/obstacle.png");
-        URL image17 = getClass().getResource("image/bonus.png");
+        URL image17 = getClass().getResource("image/imageBonus.png");
         URL image2 = getClass().getResource("image/teteHaut.png");
         URL image3 = getClass().getResource("image/teteBas.png");
         URL image4 = getClass().getResource("image/teteDroite.png");
@@ -246,6 +247,7 @@ class Grille extends JPanel {
             imageCoudeHaut2 = imageCoudeHaut2.getScaledInstance(10, 10, imageCoudeHaut2.SCALE_DEFAULT);
             imageBonus = ImageIO.read(image17);
             imageBonus = imageBonus.getScaledInstance(10, 10, imageBonus.SCALE_DEFAULT);
+
         } catch (IOException e){
             e.printStackTrace();
         }
@@ -258,6 +260,12 @@ class Grille extends JPanel {
             public void run() {
                 tempPomme ++;
                 tempsBonus ++;
+                tempsInversion++;
+
+                if (tempsInversion > 150){
+                    malusInversion = false;
+                    tempsInversion = 0;
+                }
 
                 if (modeJeu == 1 ){
                     snake.avancerSerpent();
@@ -278,11 +286,12 @@ class Grille extends JPanel {
                     pomme = new Fruit();
                     tempPomme = 0;
                 }
+
                 if (tempsBonus == apparitionBonus){
                     bonus = new Bonus();
                     bonusOuPasBonus = true;
-//                    priseBonus = true;
                 }
+
                 if (bonusOuPasBonus){
                     if (tempsBonus == 40){
                         bonusOuPasBonus = false;
@@ -329,17 +338,19 @@ class Grille extends JPanel {
 
         // commande pour le joueur 1 : les fleches
         if(t =='q' && pause == false){
-            if (malusInversion){
+            if (malusInversion && tempsInversion < 150){
                 snake.tourne(2);
             }else {
                 snake.tourne(1);
             }
         }
         if(t =='d' && pause == false){
-            if (malusInversion){
+            if (malusInversion && tempsInversion < 150){
                 snake.tourne(1);
             }else {
                 snake.tourne(2);
+                malusInversion = false;
+                tempsInversion = 0;
             }
         }
 
@@ -593,6 +604,9 @@ class Grille extends JPanel {
             g.setFont(new Font("Arial", 0, 19));
             g.drawString("Niveau : "+ niveau, 10, 50);
 
+            if (malusInversion){
+                g.drawString("Malus : " + tempsInversion + "/ 150", 10, 70);
+            }
 
             //parcours de la liste avec un itérateur
             //on dessine le serpent
@@ -833,5 +847,4 @@ class Grille extends JPanel {
             e1.printStackTrace();
         }
     }
-
 }
