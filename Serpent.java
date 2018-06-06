@@ -52,6 +52,7 @@ class Serpent{
         pseudoJoueur = pseudo;
         this.score = score;
         listePoint = new ArrayList<Point>();
+        listeDirection = new ArrayList<Integer>();
         Random r = new Random();
         //on determine aleatoirement la position du serpent
         int x = Math.abs(r.nextInt() % largeur);
