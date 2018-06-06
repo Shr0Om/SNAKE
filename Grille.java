@@ -600,12 +600,12 @@ class Grille extends JPanel {
 
             g.setColor(Color.black);
             g.setFont(new Font("Arial", 0, 19));
-            g.drawString("Score : "+ snake.getScore(), 10, 30);
+            g.drawString("Score : "+ snake.getScore(), 10, 35);
             g.setFont(new Font("Arial", 0, 19));
-            g.drawString("Niveau : "+ niveau, 10, 50);
+            g.drawString("Niveau : "+ niveau, 10, 55);
 
             if (malusInversion){
-                g.drawString("Malus : " + tempsInversion + "/ 150", 10, 70);
+                g.drawString("Malus : " + tempsInversion + "/ 150", 10, 15);
             }
 
             //parcours de la liste avec un itérateur
@@ -847,4 +847,5 @@ class Grille extends JPanel {
             e1.printStackTrace();
         }
     }
+
 }
