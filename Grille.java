@@ -385,19 +385,29 @@ class Grille extends JPanel {
 
         for (int i=0; i < nbObstacle ; i++){
             while(true){
-                mur = new Obstacle();
+                mur = new Obstacle();             
+                if (mur.p.x > snake.getList().get(0).x && mur.p.y == snake.getList().get(0).y){
+                    mur = new Obstacle();
+                }
+                
                 for(Point serpent : snake.getList()){                   // condition pour vérifier si la pomme n'apparait
                     if(mur.p.x == serpent.x && mur.p.y == serpent.y){   // pas sur le snake, sinon on recommence
                         mur = new Obstacle();
                     }
                 }
+                
                 if (modeJeu == 2){
+                    if (mur.p.x > snake2.getList().get(0).x && mur.p.y == snake2.getList().get(0).y){
+                      mur = new Obstacle();
+                    }
+                    
                     for(Point serpent : snake2.getList()){                   // condition pour vérifier si la pomme n'apparait
                         if(mur.p.x == serpent.x && mur.p.y == serpent.y){    // pas sur le snake, sinon on recommence
                             mur = new Obstacle();
                         }
                     }
                 }
+                
                 if (mur.p.x == pomme.p.x && mur.p.y == pomme.p.y){
                     mur = new Obstacle();
                 }
