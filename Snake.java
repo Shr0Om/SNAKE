@@ -11,25 +11,19 @@ class Snake extends JFrame implements KeyListener {
 
     private Grille dessin;
 
-    JPanel p1, p2;
-    JTextArea s;
-    JMenuBar mymbar;
-    JMenu game, help, level;
-    private int score1;
-    private String pseudo1;
-    private int score2;
-    private String pseudo2;
-    private int score3;
-    private String pseudo3;
-    public JLabel afficheScore;
-    ArrayList<Integer> records = new ArrayList<Integer>();
-    ArrayList<String> pseudo = new ArrayList<String>();
+    private JPanel jPanel1, jPanel2, jPanel3;
+//    private JMenuBar jMenuBar;
+//    private JMenu game, help, level;
+    private JLabel jLabel1, afficheScore, afficheMeilleurScore1, afficheMeilleurScore2, afficheMeilleurScore3;
+    private MeilleurScore meilleurScore = new MeilleurScore();
+//    private ArrayList<Integer> meilleurScore = new ArrayList<Integer>();
+//    private ArrayList<String> meilleurPseudo = new ArrayList<String>();
 
 
     public Snake(int modeJeu, String pseudoJoueur, String pseudoJoueur2) {
         super("SNAKE");
         // créer menu bar avec des fonctionnalités
-        menuBar();
+//        menuBar();
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 dispose();
@@ -46,38 +40,66 @@ class Snake extends JFrame implements KeyListener {
 
         JPanel grille = new JPanel();
 
-        JLabel label = new JLabel("Le Jeu: SNAKE");
-        JPanel centreTitre = new JPanel();
+        jLabel1 = new JLabel();
+        jLabel1.setFont(new Font("Century Gothic", 0, 35));
+        jLabel1.setForeground(new Color(212, 212, 212));
+        jLabel1.setText("             SNAKE             ");
+        jLabel1.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(255, 255, 255)));
 
-        centreTitre.add(label);
+
+        jPanel2 = new JPanel();
+        jPanel2.setBackground(new Color(36,47,65));
+
+        jPanel2.add(jLabel1);
+
         grille.setLayout(new BorderLayout());
+        grille.setBackground(new Color(36,47,65));
         grille.setPreferredSize(new Dimension(800, 600));
+        grille.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
         grille.add(dessin, BorderLayout.CENTER);
-        grille.add(centreTitre, BorderLayout.NORTH);
+        grille.add(jPanel2, BorderLayout.NORTH);
 
         JPanel fenetreJeu = new JPanel();
         fenetreJeu.setLayout(new BorderLayout());
 
-        p1 = new JPanel();
-        p1.setLayout(new BoxLayout(p1, BoxLayout.Y_AXIS));
+        jPanel1 = new JPanel();
+        jPanel1.setBackground(new Color(36,47,65));
+        jPanel1.setLayout(new BoxLayout(jPanel1, BoxLayout.Y_AXIS));
 
-        // appel de la fonction pour lire les meilleurs scores et les sauvegarder dans les variables
-        readScore();
 
-        afficheScore = new JLabel("Les meilleurs scores :      ");
+        afficheScore = new JLabel();
+        afficheScore.setFont(new Font("Century Gothic", 0, 20));
+        afficheScore.setForeground(new Color(255,255,255));
+        afficheScore.setText("Les meilleurs scores : ");
 
-        JLabel afficheMeilleurScore1 = new JLabel(" 1 : " + pseudo1 + " : " + score1);
-        JLabel afficheMeilleurScore2 = new JLabel(" 2 : " + pseudo2 + " : " + score2);
-        JLabel afficheMeilleurScore3 = new JLabel(" 3 : " + pseudo3 + " : " + score3);
+        afficheMeilleurScore1 = new JLabel();
+        afficheMeilleurScore1.setFont(new Font("Century Gothic", 0, 20));
+        afficheMeilleurScore1.setForeground(new Color(255,255,255));
+        afficheMeilleurScore1.setText("          " + meilleurScore.getMeilleurPseudo().get(0) + " :  " + meilleurScore.getMeilleurScore().get(0));
 
-        p1.add(afficheScore);
-        p1.add(afficheMeilleurScore1);
-        p1.add(afficheMeilleurScore2);
-        p1.add(afficheMeilleurScore3);
-        p1.setSize(300,600);
+        afficheMeilleurScore2 = new JLabel();
+        afficheMeilleurScore2.setFont(new Font("Century Gothic", 0, 20));
+        afficheMeilleurScore2.setForeground(new Color(255,255,255));
+        afficheMeilleurScore2.setText("          " + meilleurScore.getMeilleurPseudo().get(1) + " :  " + meilleurScore.getMeilleurScore().get(1));
+
+        afficheMeilleurScore3 = new JLabel();
+        afficheMeilleurScore3.setFont(new Font("Century Gothic", 0, 20));
+        afficheMeilleurScore3.setForeground(new Color(255,255,255));
+        afficheMeilleurScore3.setText("          " + meilleurScore.getMeilleurPseudo().get(2) + " :  " + meilleurScore.getMeilleurScore().get(2));
+
+        jPanel1.add(afficheScore);
+        jPanel1.add(afficheMeilleurScore1);
+        jPanel1.add(afficheMeilleurScore2);
+        jPanel1.add(afficheMeilleurScore3);
+        jPanel1.setBorder(BorderFactory.createEmptyBorder(100,20,0,15));
+
+        jPanel3 = new JPanel();
+        jPanel3.setBorder(BorderFactory.createMatteBorder(0,3,0,0,Color.white));
+        jPanel3.setBackground(new Color(36,47,65));
+        jPanel3.add(jPanel1);
 
         fenetreJeu.add(grille, BorderLayout.WEST);
-        fenetreJeu.add(p1, BorderLayout.EAST);
+        fenetreJeu.add(jPanel3, BorderLayout.EAST);
 
         setContentPane(fenetreJeu);
     }
@@ -123,99 +145,4 @@ class Snake extends JFrame implements KeyListener {
     }
 
 
-    public void menuBar() {
-        mymbar = new JMenuBar();
-
-        game = new JMenu("Jeu");
-
-        JMenuItem newgame = new JMenuItem("Nouvelle Partie");
-        JMenuItem exit = new JMenuItem("Quitter");
-
-        newgame.addActionListener(
-                new ActionListener() {
-
-                    public void actionPerformed(ActionEvent e) {
-//                        reset();
-                    }
-                });
-        exit.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
-
-        game.add(newgame);
-        game.addSeparator();
-        game.add(exit);
-        mymbar.add(game);
-
-        level = new JMenu("Niveau");
-        mymbar.add(level);
-        help = new JMenu("Help");
-
-        JMenuItem creator = new JMenuItem("Information");
-        JMenuItem instruction = new JMenuItem("Commande");
-
-        creator.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(p2, "CREATEURS :\n NORMANT Thomas C1\n PAILLARD Tanguy C1\n HASNAOUI Lounèse C2\n ROVICQUE Marco C2\n LONGECHAMPS Clément C1\n VIEILLE Chloé C1 BIG BOSS\n Pour les réalisations de notre projet tuteuré de S2");
-            }
-        });
-        instruction.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(p2, "Les commandes sont  :\n Joueur 1 ; <- pour aller à gauche et -> pour aller à droite\n Joueur 2 ; \n touche espace pour la pause ");
-            }
-        });
-
-        help.add(creator);
-        help.add(instruction);
-        mymbar.add(help);
-
-        setJMenuBar(mymbar);
-    }
-
-
-
-    public void readScore(){
-
-        File file1 = new File("src\\score\\meilleurScore.txt");
-        File file2 = new File("src\\score\\pseudo.txt");
-
-        try {
-            // lecture des meilleurs scores dans fichier
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file1),"UTF-8"));
-            String line = reader.readLine();
-            System.out.println(line);
-            while (line != null){
-                int meilleurscore = Integer.parseInt(line);
-                records.add(meilleurscore);
-                line = reader.readLine();
-            }
-            score1 = records.get(0);
-            score2 = records.get(1);
-            score3 = records.get(2);
-            reader.close();
-
-            // lecture des pseudos associé aux meilleurs scores
-            reader = new BufferedReader(new InputStreamReader(new FileInputStream(file2),"UTF-8"));
-            line = reader.readLine();
-            System.out.println(line);
-            while (line != null){
-                pseudo.add(line);
-                line = reader.readLine();
-            }
-            pseudo1 = pseudo.get(0);
-            pseudo2 = pseudo.get(1);
-            pseudo3 = pseudo.get(2);
-
-            reader.close();
-            } catch (UnsupportedEncodingException e1) {
-            e1.printStackTrace();
-        } catch (FileNotFoundException e1) {
-            e1.printStackTrace();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-
-    }
 }
