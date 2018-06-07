@@ -449,11 +449,11 @@ class Grille extends JPanel {
         // pour vérifier si il ne va pas a l'exterieur du plateau
         if (tete.x < 10 || tete.y > 510 || tete.x > 770 || tete.y < 10){
             if (modeJeu == 1 ){
-                messageMort.add(s.getPseudoJoueur() + " s'est pris un mur");
+                messageMort.add(s.getPseudoJoueur() + " s'est prit un mur");
                 messageMort.add("Score : " + s.getScore());
             }
             if (modeJeu == 2 ){
-                messageMort.add(s.getPseudoJoueur() + " s'est pris un mur");
+                messageMort.add(s.getPseudoJoueur() + " s'est prit un mur");
                 messageMort.add(snake.getPseudoJoueur() + " : " + snake.getScore());
                 messageMort.add(snake2.getPseudoJoueur() + " : " + snake2.getScore());
             }
@@ -487,11 +487,11 @@ class Grille extends JPanel {
         for (Obstacle obstacle : tabObstacle ) {
             if(obstacle.p.x == tete.x && obstacle.p.y == tete.y){
                 if (modeJeu == 1 ){
-                    messageMort.add(s.getPseudoJoueur() + " s'est pris un obstacle");
+                    messageMort.add(s.getPseudoJoueur() + " s'est prit un obstacle");
                     messageMort.add("Score : " + s.getScore());
                 }
                 if (modeJeu == 2 ){
-                    messageMort.add(s.getPseudoJoueur() + " s'est pris un obstacle");
+                    messageMort.add(s.getPseudoJoueur() + " s'est prit un obstacle");
                     messageMort.add(snake.getPseudoJoueur() + " : " + snake.getScore());
                     messageMort.add(snake2.getPseudoJoueur() + " : " + snake2.getScore());
                 }
@@ -522,7 +522,7 @@ class Grille extends JPanel {
         // vérifie si le serpent ne touche pas un autre serpent avec sa tête pour le Serpent 1
         for (Point p : s2.getList() ) {
             if(p.x == tete1.x && p.y == tete1.y){
-                messageMort.add(s1.getPseudoJoueur() + " s'est pris l'ennemi");
+                messageMort.add(s1.getPseudoJoueur() + " s'est prit l'ennemi");
                 messageMort.add(s1.getPseudoJoueur() + " : " + s1.getScore());
                 messageMort.add(s2.getPseudoJoueur() + " : " + s2.getScore());
             }
@@ -531,7 +531,7 @@ class Grille extends JPanel {
         // vérifie si le serpent ne touche pas un autre serpent avec sa tête pour le Serpent 2
         for (Point p : s1.getList() ) {
             if(p.x == tete2.x && p.y == tete2.y){
-                messageMort.add(s2.getPseudoJoueur() + " s'est pris l'ennemi");
+                messageMort.add(s2.getPseudoJoueur() + " s'est prit l'ennemi");
                 messageMort.add(s1.getPseudoJoueur() + " : " + s1.getScore());
                 messageMort.add(s2.getPseudoJoueur() + " : " + s2.getScore());
             }
