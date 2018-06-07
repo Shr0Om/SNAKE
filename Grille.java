@@ -435,7 +435,7 @@ class Grille extends JPanel {
                 if (p.x == tete.x && p.y == tete.y){
                     if (modeJeu == 1 ){
                         messageMort.add(s.getPseudoJoueur() + " s'est mangé la queue");
-                        messageMort.add("Score : " + s.getScore());
+                        messageMort.add("score : " + s.getScore());
                     }
                     if (modeJeu == 2 ){
                         messageMort.add(s.getPseudoJoueur() + " s'est mangé la queue");
@@ -450,7 +450,7 @@ class Grille extends JPanel {
         if (tete.x < 10 || tete.y > 510 || tete.x > 770 || tete.y < 10){
             if (modeJeu == 1 ){
                 messageMort.add(s.getPseudoJoueur() + " s'est prit un mur");
-                messageMort.add("Score : " + s.getScore());
+                messageMort.add("score : " + s.getScore());
             }
             if (modeJeu == 2 ){
                 messageMort.add(s.getPseudoJoueur() + " s'est prit un mur");
@@ -488,7 +488,7 @@ class Grille extends JPanel {
             if(obstacle.p.x == tete.x && obstacle.p.y == tete.y){
                 if (modeJeu == 1 ){
                     messageMort.add(s.getPseudoJoueur() + " s'est prit un obstacle");
-                    messageMort.add("Score : " + s.getScore());
+                    messageMort.add("score : " + s.getScore());
                 }
                 if (modeJeu == 2 ){
                     messageMort.add(s.getPseudoJoueur() + " s'est prit un obstacle");
@@ -607,10 +607,17 @@ class Grille extends JPanel {
             g.drawString("Q pour aller à gauche", 180, 300);
             g.drawString("D pour aller à droite", 420, 300);
 
+            if (modeJeu == 2){
+                g.setColor(Color.red);
+                g.setFont(new Font("Arial", 0, 19));
+                g.drawString("4 pour aller à gauche", 180, 350);
+                g.drawString("6 pour aller à droite", 420, 350);
+            }
+
             g.setColor(Color.black);
             g.setFont(new Font("Century Gothic", 0, 20));
             g.drawString("Appuyer sur Espace pour démarrer", 225, 450);
-            g.drawString("Appuyer sur Echap pour quitter le jeu", 225, 500);
+            g.drawString("Appuyer sur Echap pour quitter le jeu", 210, 500);
         }
 
         tete1 = snake.getList().get(0);
@@ -622,7 +629,7 @@ class Grille extends JPanel {
             g.setFont(new Font("Century Gothic", 0, 19));
             g.drawString("Niveau : "+ niveau, 10, 30);
             g.setFont(new Font("Century Gothic", 0, 19));
-            g.drawString("Score : "+ snake.getScore(), 10, 50);
+            g.drawString("score : "+ snake.getScore(), 10, 60);
 
 
             //parcours de la liste avec un itérateur
