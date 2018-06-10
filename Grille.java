@@ -36,9 +36,6 @@ class Grille extends JPanel {
     private int tempsInversion = 0;
     private boolean bonusOuPasBonus = false;
     private boolean malusInversion = false;
-    private int dureeBonus = 0;
-    private boolean priseBonus = false;
-
 
     boolean pause;
     private Timer timer;
@@ -400,40 +397,52 @@ class Grille extends JPanel {
     public void gestionObstacle(int nbObstacle){
 
         tabObstacle = new ArrayList<Obstacle>();
-        Obstacle mur;
+        Obstacle obstacle;
 
         for (int i=0; i < nbObstacle ; i++){
-            while(true){
-                mur = new Obstacle();
-                if (mur.p.x > snake.getList().get(0).x && mur.p.y == snake.getList().get(0).y){
-                    mur = new Obstacle();
-                }
-
-                for(Point serpent : snake.getList()){                   // condition pour vérifier si la pomme n'apparait
-                    if(mur.p.x == serpent.x && mur.p.y == serpent.y){   // pas sur le snake, sinon on recommence
-                        mur = new Obstacle();
-                    }
-                }
+            obstacle = new Obstacle();
+            while(securiteSerpentObstacle(obstacle, snake) == false){
+                obstacle = new Obstacle();
 
                 if (modeJeu == 2){
-                    if (mur.p.x > snake2.getList().get(0).x && mur.p.y == snake2.getList().get(0).y){
-                        mur = new Obstacle();
-                    }
-
-                    for(Point serpent : snake2.getList()){                   // condition pour vérifier si la pomme n'apparait
-                        if(mur.p.x == serpent.x && mur.p.y == serpent.y){    // pas sur le snake, sinon on recommence
-                            mur = new Obstacle();
-                        }
+                    while(securiteSerpentObstacle(obstacle, snake2) == false){
+                        obstacle = new Obstacle();
                     }
                 }
-
-                if (mur.p.x == pomme.p.x && mur.p.y == pomme.p.y){
-                    mur = new Obstacle();
-                }
-                break;
             }
-            tabObstacle.add(mur);
+            tabObstacle.add(obstacle);
         }
+    }
+
+    // methode appelé a lacréation des obstacles pour éviter qu'il soit sur le serpent ou trop proche du
+    // serpent, ainsi que pas sur la pomme
+    public boolean securiteSerpentObstacle(Obstacle obstacle, Serpent s){
+        for (int i = 0; i < 20 ; i++) {
+            for(Point serpent : s.getList()){                   // condition pour vérifier si la pomme n'apparait
+                if(obstacle.p.x == serpent.x+i && obstacle.p.y == serpent.y+i ){   // pas sur le snake, sinon on recommence
+                    return false;
+                }
+            }
+            for(Point serpent : s.getList()){
+                if(obstacle.p.x == serpent.x-i && obstacle.p.y == serpent.y+i ){
+                    return false;
+                }
+            }
+            for(Point serpent : s.getList()){
+                if(obstacle.p.x == serpent.x-i && obstacle.p.y == serpent.y-i ){
+                    return false;
+                }
+            }
+            for(Point serpent : s.getList()){
+                if(obstacle.p.x == serpent.x+i && obstacle.p.y == serpent.y-i ){
+                    return false;
+                }
+            }
+        }
+        if (obstacle.p.x == pomme.p.x && obstacle.p.y == pomme.p.y){
+            return false;
+        }
+        return true;
     }
 
 
@@ -466,7 +475,7 @@ class Grille extends JPanel {
         }
 
         // pour vérifier si il ne va pas a l'exterieur du plateau
-        if (tete.x < 0 || tete.y > 510 || tete.x > 770 || tete.y < 10){
+        if (tete.x < 0 || tete.y > 510 || tete.x > 770 || tete.y < 0){
             if (modeJeu == 1 ){
                 messageMort.add(s.getPseudoJoueur() + " s'est prit un mur");
                 messageMort.add("Score : " + s.getScore());
@@ -724,32 +733,36 @@ class Grille extends JPanel {
                         g.drawImage(imageCorpsCote, snake.getList().get(i).x, snake.getList().get(i).y, this);
                     }
 
-                    if (snake.getListeDirection().get(i) == 1 && snake.getListeDirection().get(i-1) == 2 ){
-                        g.drawImage(imageCoudeGauche, snake.getList().get(i).x, snake.getList().get(i).y, this);
-                    }
-                    if (snake.getListeDirection().get(i) == 1 && snake.getListeDirection().get(i-1) == 0 ){
-                        g.drawImage(imageCoudeHaut, snake.getList().get(i).x, snake.getList().get(i).y, this);
-                    }
+                    // pour éviter l'apparition d'erreur out of bound 
+                    if (i-1 >=0){
+                        if (snake.getListeDirection().get(i) == 1 && snake.getListeDirection().get(i-1) == 2 ){
+                            g.drawImage(imageCoudeGauche, snake.getList().get(i).x, snake.getList().get(i).y, this);
+                        }
+                        if (snake.getListeDirection().get(i) == 1 && snake.getListeDirection().get(i-1) == 0 ){
+                            g.drawImage(imageCoudeHaut, snake.getList().get(i).x, snake.getList().get(i).y, this);
+                        }
 
-                    if (snake.getListeDirection().get(i) == 2 && snake.getListeDirection().get(i-1) == 1 ){
-                        g.drawImage(imageCoudeBas, snake.getList().get(i).x, snake.getList().get(i).y, this);
-                    }
-                    if (snake.getListeDirection().get(i) == 2 && snake.getListeDirection().get(i-1) == 3 ){
-                        g.drawImage(imageCoudeHaut, snake.getList().get(i).x, snake.getList().get(i).y, this);
-                    }
+                        if (snake.getListeDirection().get(i) == 2 && snake.getListeDirection().get(i-1) == 1 ){
+                            g.drawImage(imageCoudeBas, snake.getList().get(i).x, snake.getList().get(i).y, this);
+                        }
+                        if (snake.getListeDirection().get(i) == 2 && snake.getListeDirection().get(i-1) == 3 ){
+                            g.drawImage(imageCoudeHaut, snake.getList().get(i).x, snake.getList().get(i).y, this);
+                        }
 
-                    if (snake.getListeDirection().get(i) == 3 && snake.getListeDirection().get(i-1) == 0 ){
-                        g.drawImage(imageCoudeBas, snake.getList().get(i).x, snake.getList().get(i).y, this);
-                    }
-                    if (snake.getListeDirection().get(i) == 3 && snake.getListeDirection().get(i-1) == 2 ){
-                        g.drawImage(imageCoudeDroit, snake.getList().get(i).x, snake.getList().get(i).y, this);
-                    }
+                        if (snake.getListeDirection().get(i) == 3 && snake.getListeDirection().get(i-1) == 0 ){
+                            g.drawImage(imageCoudeBas, snake.getList().get(i).x, snake.getList().get(i).y, this);
+                        }
+                        if (snake.getListeDirection().get(i) == 3 && snake.getListeDirection().get(i-1) == 2 ){
+                            g.drawImage(imageCoudeDroit, snake.getList().get(i).x, snake.getList().get(i).y, this);
+                        }
 
-                    if (snake.getListeDirection().get(i) == 0 && snake.getListeDirection().get(i-1) == 1 ){
-                        g.drawImage(imageCoudeDroit, snake.getList().get(i).x, snake.getList().get(i).y, this);
-                    }
-                    if (snake.getListeDirection().get(i) == 0 && snake.getListeDirection().get(i-1) == 3 ){
-                        g.drawImage(imageCoudeGauche, snake.getList().get(i).x, snake.getList().get(i).y, this);
+                        if (snake.getListeDirection().get(i) == 0 && snake.getListeDirection().get(i-1) == 1 ){
+                            g.drawImage(imageCoudeDroit, snake.getList().get(i).x, snake.getList().get(i).y, this);
+                        }
+                        if (snake.getListeDirection().get(i) == 0 && snake.getListeDirection().get(i-1) == 3 ){
+                            g.drawImage(imageCoudeGauche, snake.getList().get(i).x, snake.getList().get(i).y, this);
+                        }
+
                     }
                 }
             }
@@ -809,33 +822,36 @@ class Grille extends JPanel {
                             g.drawImage(imageCorpsCote2, snake2.getList().get(i).x, snake2.getList().get(i).y, this);
                         }
 
-                        if (snake2.getListeDirection().get(i) == 1 && snake2.getListeDirection().get(i-1) == 2 ){
-                            g.drawImage(imageCoudeGauche2, snake2.getList().get(i).x, snake2.getList().get(i).y, this);
-                        }
-                        if (snake2.getListeDirection().get(i) == 1 && snake2.getListeDirection().get(i-1) == 0 ){
-                            g.drawImage(imageCoudeHaut2, snake2.getList().get(i).x, snake2.getList().get(i).y, this);
+                        if (i-1 >=0){
+                            if (snake2.getListeDirection().get(i) == 1 && snake2.getListeDirection().get(i-1) == 2 ){
+                                g.drawImage(imageCoudeGauche2, snake2.getList().get(i).x, snake2.getList().get(i).y, this);
+                            }
+                            if (snake2.getListeDirection().get(i) == 1 && snake2.getListeDirection().get(i-1) == 0 ){
+                                g.drawImage(imageCoudeHaut2, snake2.getList().get(i).x, snake2.getList().get(i).y, this);
+                            }
+
+                            if (snake2.getListeDirection().get(i) == 2 && snake2.getListeDirection().get(i-1) == 1 ){
+                                g.drawImage(imageCoudeBas2, snake2.getList().get(i).x, snake2.getList().get(i).y, this);
+                            }
+                            if (snake2.getListeDirection().get(i) == 2 && snake2.getListeDirection().get(i-1) == 3 ){
+                                g.drawImage(imageCoudeHaut2, snake2.getList().get(i).x, snake2.getList().get(i).y, this);
+                            }
+
+                            if (snake2.getListeDirection().get(i) == 3 && snake2.getListeDirection().get(i-1) == 0 ){
+                                g.drawImage(imageCoudeBas2, snake2.getList().get(i).x, snake2.getList().get(i).y, this);
+                            }
+                            if (snake2.getListeDirection().get(i) == 3 && snake2.getListeDirection().get(i-1) == 2 ){
+                                g.drawImage(imageCoudeDroit2, snake2.getList().get(i).x, snake2.getList().get(i).y, this);
+                            }
+
+                            if (snake2.getListeDirection().get(i) == 0 && snake2.getListeDirection().get(i-1) == 1 ){
+                                g.drawImage(imageCoudeDroit2, snake2.getList().get(i).x, snake2.getList().get(i).y, this);
+                            }
+                            if (snake2.getListeDirection().get(i) == 0 && snake2.getListeDirection().get(i-1) == 3 ){
+                                g.drawImage(imageCoudeGauche2, snake2.getList().get(i).x, snake2.getList().get(i).y, this);
+                            }
                         }
 
-                        if (snake2.getListeDirection().get(i) == 2 && snake2.getListeDirection().get(i-1) == 1 ){
-                            g.drawImage(imageCoudeBas2, snake2.getList().get(i).x, snake2.getList().get(i).y, this);
-                        }
-                        if (snake2.getListeDirection().get(i) == 2 && snake2.getListeDirection().get(i-1) == 3 ){
-                            g.drawImage(imageCoudeHaut2, snake2.getList().get(i).x, snake2.getList().get(i).y, this);
-                        }
-
-                        if (snake2.getListeDirection().get(i) == 3 && snake2.getListeDirection().get(i-1) == 0 ){
-                            g.drawImage(imageCoudeBas2, snake2.getList().get(i).x, snake2.getList().get(i).y, this);
-                        }
-                        if (snake2.getListeDirection().get(i) == 3 && snake2.getListeDirection().get(i-1) == 2 ){
-                            g.drawImage(imageCoudeDroit2, snake2.getList().get(i).x, snake2.getList().get(i).y, this);
-                        }
-
-                        if (snake2.getListeDirection().get(i) == 0 && snake2.getListeDirection().get(i-1) == 1 ){
-                            g.drawImage(imageCoudeDroit2, snake2.getList().get(i).x, snake2.getList().get(i).y, this);
-                        }
-                        if (snake2.getListeDirection().get(i) == 0 && snake2.getListeDirection().get(i-1) == 3 ){
-                            g.drawImage(imageCoudeGauche2, snake2.getList().get(i).x, snake2.getList().get(i).y, this);
-                        }
                     }
                 }
             }
