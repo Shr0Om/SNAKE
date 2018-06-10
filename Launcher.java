@@ -23,18 +23,15 @@ public class Launcher extends JFrame {
     private JOptionPane erreur;
     private JDialog erreurDialog;
 
-    private JLabel titreHelp;
-    private JPanel panoTitre, panoBouton, panoGlobal;
-    private JButton unJoueur;
-    private JPanel centreTitre;
     private boolean multi = false, unPlayer = true, verification;
 
     public Launcher() {
         initComponent();
         afficheWidget();
         action();
-        setSize(400,250);
+        setSize(450,250);
         setLocation(400,200);
+        setResizable(false);
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
@@ -43,7 +40,8 @@ public class Launcher extends JFrame {
         initComponent();
         afficheWidget();
         action();
-        setSize(400,250);
+        setSize(450,250);
+        setResizable(false);
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
@@ -52,16 +50,7 @@ public class Launcher extends JFrame {
         initComponent();
         afficheWidgetMulti();
         action();
-        setSize(400,300);
-        setVisible(true);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-    }
-
-    private void help(){
-        creerWidgetHelp();
-        afficheWidgetHelp();
-        action();
-        setSize(400,300);
+        setSize(450,300);
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
@@ -231,31 +220,6 @@ public class Launcher extends JFrame {
 
 
         erreur = new JOptionPane();
-    }
-
-    private void creerWidgetHelp(){
-
-        titreHelp = new JLabel("Aide");
-        centreTitre = new JPanel();
-        centreTitre.add(titreHelp);
-        titreHelp.setFont(new Font(titreHelp.getFont().getName(), titreHelp.getFont().getStyle(), 30));
-
-        unJoueur = new JButton("Retour");
-
-        panoTitre = new JPanel(new BorderLayout());
-        panoBouton = new JPanel();
-        panoGlobal = new JPanel(new BorderLayout());
-    }
-
-    private void afficheWidgetHelp(){
-
-        panoTitre.add(centreTitre, BorderLayout.NORTH);
-        panoBouton.add(unJoueur);
-        panoGlobal.setLayout(new BoxLayout(panoGlobal, BoxLayout.Y_AXIS));
-        panoGlobal.add(panoTitre);
-        panoGlobal.add(panoBouton);
-        setContentPane(panoGlobal);
-
     }
 
     private void afficheWidget(){
